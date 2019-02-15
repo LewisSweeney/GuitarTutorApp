@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GuitarTutorApp</string>
+    <string name="instrument_spinner_title">Instrument</string>
+    <string name="tuning_spinner_title">Tuning</string>
+</resources>
