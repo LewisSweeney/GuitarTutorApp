@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.List;
+
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
@@ -15,6 +18,10 @@ import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesDAO;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,11 +29,16 @@ public class MainActivity extends AppCompatActivity {
     AudioDispatcher dispatcher;
     TextView pitchText;
     TextView noteText;
+    TextView testText;
+
+    List<Note> notes;
+    NotesViewModel view;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        view = new NotesViewModel(this.getApplication());
         setContentView(R.layout.activity_main);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -51,8 +63,27 @@ public class MainActivity extends AppCompatActivity {
             dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
         }
 
-        pitchText = (TextView) findViewById(R.id.pitchText);
-        noteText = (TextView) findViewById(R.id.noteText);
+        pitchText = findViewById(R.id.pitchText);
+        noteText = findViewById(R.id.noteText);
+        testText = findViewById(R.id.noteDBTest);
+
+        CsvReader reader;
+        notes = null;
+        try {
+           reader = new CsvReader(getResources().getString(R.string.notes_file_name),this);
+           reader.readFile();
+           notes = reader.getNotes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        testText.setText(notes.get(35).getNoteName());
+
+        NotesViewModel noteView = new NotesViewModel(this.getApplication());
+
+        List<Note> notesList = noteView.getAllNotesAsList();
+
+        System.out.println(notesList.get(35));
 
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
@@ -82,6 +113,14 @@ public class MainActivity extends AppCompatActivity {
     public void processPitch(float pitchInHz) {
 
         pitchText.setText("" + pitchInHz);
+
+        for(int i = 0; i < notes.size(); i++){
+            if(i == 0){
+                float freqDifferenceUp = notes.get(i+1).getFrequency() - notes.get(i).getFrequency();
+                System.out.println(freqDifferenceUp);
+
+            }
+        }
 
         if (pitchInHz >= 110 && pitchInHz < 123.47) {
             //A

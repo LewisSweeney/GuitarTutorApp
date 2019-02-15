@@ -2,4 +2,6 @@
     <string name="app_name">GuitarTutorApp</string>
     <string name="instrument_spinner_title">Instrument</string>
     <string name="tuning_spinner_title">Tuning</string>
+    <string name="notes_file_name">csv/notes.csv</string>
+    <string name="tuning_file_name">csv/tunings.csv</string>
 </resources>
