@@ -3,6 +3,7 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import java.util.List;
@@ -12,8 +13,8 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 @Dao
 public interface NotesDAO {
 
-    @Insert
-    void insertNotes(List<Note> notes);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertNotes(Note[] notes);
 
     /**
      * Gets a single note from the room database, called as and when required
@@ -24,5 +25,5 @@ public interface NotesDAO {
     Note getNoteByName(String noteName);
 
     @Query("SELECT * FROM notes")
-    List<Note> getAllNotes();
+    Note[] getAllNotes();
 }

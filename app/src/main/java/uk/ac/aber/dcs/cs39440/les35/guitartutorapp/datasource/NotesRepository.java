@@ -13,10 +13,11 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 public class NotesRepository {
     // Data access object to allow interaction with the Notes table/entity
     private NotesDAO noteDAO;
-    private List<Note> notesList;
+    private Note[] notesList;
 
     public NotesRepository(Application application){
         GuitarRoomDatabase db = GuitarRoomDatabase.getDatabase(application);
+        noteDAO = db.getNotesDao();
         notesList = noteDAO.getAllNotes();
     }
 
@@ -25,11 +26,12 @@ public class NotesRepository {
      * Creates a new instance of the corresponding extension of AsyncTask and
      * @param notes The notes that are being added to the table.
      */
-    public void insert(Note notes){
+    public void insert(Note[] notes){
+
         new InsertAsyncTask(noteDAO).execute(notes);
     }
 
-    public List<Note> getNotesList() {
+    public Note[] getNotesList() {
         return notesList;
     }
 
@@ -40,11 +42,11 @@ public class NotesRepository {
             mAsyncTaskDao = dao;
         }
 
-
         @Override
         protected Void doInBackground(Note... params) {
+            System.out.println("inserting at repo");
             // Calls the insert multiple words method as it supports inserting just one item
-            mAsyncTaskDao.insertNotes(Arrays.asList(params));
+            mAsyncTaskDao.insertNotes(params);
             return null;
         }
     }

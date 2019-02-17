@@ -26,7 +26,7 @@ public class CsvReader {
     BufferedReader reader;
     String line = "";
     Context context;
-    List<Note> notes = new ArrayList<>();
+    Note[] notes;
     List<Tuning> tunings = new ArrayList<>();
 
     public CsvReader(String filename, Context context) throws IOException {
@@ -34,6 +34,7 @@ public class CsvReader {
         am = context.getAssets();
         is = am.open(filename);
         this.context = context;
+        notes = new Note[108];
         reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 
 
@@ -42,10 +43,13 @@ public class CsvReader {
     public void readFile(){
         if (filename.equals(context.getResources().getString(R.string.notes_file_name))) {
             try {
+                int i = 0;
                 while ((line = reader.readLine()) != null) {
                     String[] lineSplit = line.split(",");
                     Note note = new Note(lineSplit[0], Float.valueOf(lineSplit[1]));
-                    notes.add(note);
+                    notes[i] = note;
+                    System.out.println("ADDING ITEM");
+                    i++;
                 }
             } catch (IOException exception) {
                 Log.e("CSV Reader", "Error " + line, exception);
@@ -54,7 +58,7 @@ public class CsvReader {
         }
     }
 
-    public List<Note> getNotes() {
+    public Note[] getNotes() {
         return notes;
     }
 

@@ -13,7 +13,7 @@ public class NotesViewModel extends AndroidViewModel {
     // Repository for DB access
     private NotesRepository repo;
     // List that holds all currently stored words
-    private List<Note> noteList;
+    private Note[] noteList;
 
     public NotesViewModel(@NonNull Application application) {
         super(application);
@@ -26,11 +26,12 @@ public class NotesViewModel extends AndroidViewModel {
      *
      * @param note
      */
-    public void insert(Note note) {
+    public void insert(Note[] note) {
+        System.out.println("inserting at view model");
         repo.insert(note);
     }
 
-    public List<Note> getAllNotesAsList() {
+    public Note[] getAllNotesAsList() {
         return noteList;
     }
 }

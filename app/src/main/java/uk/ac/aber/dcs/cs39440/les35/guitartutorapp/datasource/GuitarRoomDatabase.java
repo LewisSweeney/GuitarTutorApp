@@ -5,9 +5,11 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -18,7 +20,7 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.MyApplication;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
- @Database(entities = {Note.class/*, Tuning.class*/}, version = 1)
+@Database(entities = {Note.class/*, Tuning.class*/}, version = 1)
 
 public abstract class GuitarRoomDatabase extends RoomDatabase {
 
@@ -26,7 +28,7 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
 
     public abstract NotesDAO getNotesDao();
 
-   // public abstract TuningDAO getTuningDao();
+    // public abstract TuningDAO getTuningDao();
 
 
     public static GuitarRoomDatabase getDatabase(final Context context) {
@@ -55,19 +57,9 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
 
         public void onCreate(SupportSQLiteDatabase db) {
             super.onCreate(db);
-            Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        CsvReader reader = new CsvReader("notes.csv", MyApplication.getAppContext());
-                        reader.readFile();
-                        List<Note> notes = reader.getNotes();
-                        getDatabase(MyApplication.getAppContext()).getNotesDao().insertNotes(notes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            System.out.println("TRYING TO ADD");
+            new PopulateDbAsync(INSTANCE).execute();
+
         }
 
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -77,5 +69,27 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
 
     public void closeDb() {
         close();
+    }
+
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+        private final NotesDAO notesDAO;
+
+        PopulateDbAsync(GuitarRoomDatabase db){
+            notesDAO = db.getNotesDao();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                CsvReader reader = new CsvReader("csv/notes.csv", MyApplication.getAppContext());
+                reader.readFile();
+                Note[] notes = reader.getNotes();
+                notesDAO.insertNotes(notes);
+
+            } catch (IOException e) {
+                System.out.println("CAUGHT");
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
