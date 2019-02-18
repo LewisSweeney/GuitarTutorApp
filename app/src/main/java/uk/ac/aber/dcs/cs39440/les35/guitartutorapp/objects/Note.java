@@ -7,13 +7,19 @@ import android.support.annotation.NonNull;
 @Entity(tableName= "notes")
 public class Note {
     @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private String noteName;
 
     private float frequency;
 
     public String getNoteName() {
         return noteName;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public void setNoteName(String noteName) {

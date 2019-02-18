@@ -35,6 +35,21 @@ public class NotesRepository {
         return notesList;
     }
 
+    public Note getNoteByName(String noteName){
+       Note note = noteDAO.getNoteByName(noteName);
+        return note;
+    }
+
+    public Note getNoteBefore(int id){
+        Note note = noteDAO.getNoteBefore(id);
+        return note;
+    }
+
+    public Note getNoteAfter(int id){
+        Note note = noteDAO.getNoteBefore(id);
+        return note;
+    }
+
     static class InsertAsyncTask extends AsyncTask<Note, Void, Void> {
         private NotesDAO mAsyncTaskDao;
 

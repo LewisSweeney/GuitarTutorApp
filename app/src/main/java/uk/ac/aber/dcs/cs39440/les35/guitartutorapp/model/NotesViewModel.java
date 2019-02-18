@@ -34,4 +34,19 @@ public class NotesViewModel extends AndroidViewModel {
     public Note[] getAllNotesAsList() {
         return noteList;
     }
+
+    public Note getNoteByName(String noteName) {
+        Note note = repo.getNoteByName(noteName);
+        return note;
+    }
+
+    public Note getNoteBefore(int id){
+        Note note = repo.getNoteBefore(id);
+        return note;
+    }
+
+    public Note getNoteAfter(int id){
+        Note note = repo.getNoteAfter(id);
+        return note;
+    }
 }

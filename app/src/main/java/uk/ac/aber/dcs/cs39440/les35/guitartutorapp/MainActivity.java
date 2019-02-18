@@ -2,15 +2,17 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.util.List;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
@@ -19,27 +21,28 @@ import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesDAO;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_MICROPHONE = 1;
     private static final int ACCESS_REQUESTED = 1;
     AudioDispatcher dispatcher;
-    TextView pitchText;
     TextView noteText;
-
+    TextView indicatorText;
+    Button testSounds;
     Note[] notes;
-    NotesViewModel view;
+    Tuning tuning;
+    NotesViewModel notesView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = new NotesViewModel(this.getApplication());
+        notesView = new NotesViewModel(this.getApplication());
         setContentView(R.layout.activity_main);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -65,26 +68,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        pitchText = findViewById(R.id.pitchText);
         noteText = findViewById(R.id.noteText);
-        CsvReader reader;
-        notes = null;
-        try {
-            reader = new CsvReader(getResources().getString(R.string.notes_file_name), this);
-            reader.readFile();
-            notes = reader.getNotes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        indicatorText = findViewById(R.id.indicatorText);
+        // testSounds = findViewById(R.id.testSound);
 
-        NotesViewModel noteView = new NotesViewModel(this.getApplication());
+       /* testSounds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playSound(110, 88200);
+            }
+        }); */
 
-        Note note = new Note("TEST", 1);
+        notes = notesView.getAllNotesAsList();
 
-        System.out.println("inserting at main");
-        //noteView.insert(notes);
-
-        ;
+        Note[] tuningNotes = new Note[6];
+        tuningNotes[0] = notesView.getNoteByName("E2");
+        tuningNotes[1] = notesView.getNoteByName("A2");
+        tuningNotes[2] = notesView.getNoteByName("D3");
+        tuningNotes[3] = notesView.getNoteByName("G3");
+        tuningNotes[4] = notesView.getNoteByName("B3");
+        tuningNotes[5] = notesView.getNoteByName("E4");
+        tuning = new Tuning("E Standard", InstrumentType.GUITAR, tuningNotes);
 
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         AudioProcessor pitchProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
         dispatcher.addAudioProcessor(pitchProcessor);
 
+
         Thread audioThread = new Thread(dispatcher, "Audio Thread");
 
         audioThread.start();
@@ -113,34 +118,51 @@ public class MainActivity extends AppCompatActivity {
      * @param pitchInHz
      */
     public void processPitch(float pitchInHz) {
-
-        pitchText.setText("" + pitchInHz);
-        System.out.println(pitchInHz);
         Note currentNotePlayed = null;
-
-        for (int i = 0; i < notes.length; i++) {
-            float currentNoteFreq = notes[i].getFrequency();
+        Note[] tuningNotes = tuning.getNotes();
+        for (int i = 0; i < tuningNotes.length; i++) {
+            float currentNoteFreq = tuningNotes[i].getFrequency();
             if (i == 0) {
-                float freqDifferenceUp = notes[i + 1].getFrequency() - currentNoteFreq;
-                if (pitchInHz <= notes[i].getFrequency() + (freqDifferenceUp / 2)) {
-                    currentNotePlayed = notes[i];
+                float freqDifferenceUp = tuningNotes[i + 1].getFrequency() - currentNoteFreq;
+                if (pitchInHz <= tuningNotes[i].getFrequency() + (freqDifferenceUp / 2)) {
+                    currentNotePlayed = tuningNotes[i];
                 }
-            } else if (i == notes.length - 1) {
-                float freqDifferenceDown = currentNoteFreq - notes[i - 1].getFrequency();
-                if (pitchInHz >= currentNoteFreq - (freqDifferenceDown / 2)){
-                    currentNotePlayed = notes[i];
+            } else if (i == tuningNotes.length - 1) {
+                float freqDifferenceDown = currentNoteFreq - tuningNotes[i - 1].getFrequency();
+                if (pitchInHz >= currentNoteFreq - (freqDifferenceDown / 2)) {
+                    currentNotePlayed = tuningNotes[i];
                 }
             } else {
-                float freqDifferenceUp = notes[i + 1].getFrequency() - currentNoteFreq;
-                float freqDifferenceDown = currentNoteFreq - notes[i - 1].getFrequency();
-                if (pitchInHz >= currentNoteFreq - (freqDifferenceDown / 2) && pitchInHz <= notes[i].getFrequency() + (freqDifferenceUp / 2)) {
-                    currentNotePlayed = notes[i];
+                float freqDifferenceUp = tuningNotes[i + 1].getFrequency() - currentNoteFreq;
+                float freqDifferenceDown = currentNoteFreq - tuningNotes[i - 1].getFrequency();
+                if (pitchInHz >= currentNoteFreq - (freqDifferenceDown / 2) && pitchInHz <= tuningNotes[i].getFrequency() + (freqDifferenceUp / 2)) {
+                    currentNotePlayed = tuningNotes[i];
                 }
             }
         }
 
-        if(currentNotePlayed != null){
+        int currentNoteId = currentNotePlayed.getId();
+        Note previousNote = notesView.getNoteBefore(currentNoteId);
+        Note nextNote = notesView.getNoteAfter(currentNoteId);
+
+
+        if (currentNotePlayed != null) {
             noteText.setText(currentNotePlayed.getNoteName());
+        }
+        if (pitchInHz < currentNotePlayed.getFrequency()) {
+            indicatorText.setText("Tighten this string!");
+            indicatorText.setTextColor(Color.RED);
+        } else if (pitchInHz > currentNotePlayed.getFrequency()) {
+            indicatorText.setText("Loosen this string!");
+            indicatorText.setTextColor(Color.RED);
+        } else {
+            indicatorText.setText("Perfect!");
+            indicatorText.setTextColor(Color.GREEN);
+        }
+        if (pitchInHz == -1.0) {
+            noteText.setText("---");
+            indicatorText.setText("Play a string!");
+            indicatorText.setTextColor(Color.BLACK);
         }
 
 
@@ -167,6 +189,32 @@ public class MainActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    private void playSound(double frequency, int duration) {
+        // AudioTrack definition
+        int mBufferSize = AudioTrack.getMinBufferSize(44100,
+                AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_8BIT);
+
+        AudioTrack mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100,
+                AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
+                mBufferSize, AudioTrack.MODE_STREAM);
+
+        // Sine wave
+        double[] mSound = new double[duration];
+        short[] mBuffer = new short[duration];
+        for (int i = 0; i < mSound.length; i++) {
+            mSound[i] = Math.sin((2.0 * Math.PI * i / (44100 / frequency)));
+            mBuffer[i] = (short) (mSound[i] * Short.MAX_VALUE);
+        }
+
+        mAudioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
+        mAudioTrack.play();
+
+        mAudioTrack.write(mBuffer, 0, mSound.length);
+        mAudioTrack.stop();
+        mAudioTrack.release();
     }
 }
 

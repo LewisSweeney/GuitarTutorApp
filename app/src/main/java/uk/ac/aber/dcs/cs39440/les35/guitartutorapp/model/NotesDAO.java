@@ -26,4 +26,11 @@ public interface NotesDAO {
 
     @Query("SELECT * FROM notes")
     Note[] getAllNotes();
+
+    @Query("SELECT * FROM notes WHERE id = :id-1")
+    Note getNoteBefore(int id);
+
+    @Query("SELECT * FROM notes WHERE id = :id+1")
+    Note getNoteAfter(int id);
+
 }

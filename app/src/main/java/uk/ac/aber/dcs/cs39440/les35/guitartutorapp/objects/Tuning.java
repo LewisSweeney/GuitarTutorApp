@@ -13,7 +13,14 @@ public class Tuning {
     private InstrumentType instrument;
     private Note[] notes;
 
-    public Tuning(String tuningName, InstrumentType instrument, Note[] notes){
-
+    public Tuning(String tuningName, InstrumentType instrument, Note[] notes) {
+        this.tuningName = tuningName;
+        this.instrument = instrument;
+        this.notes = notes;
     }
+
+    public Note[] getNotes() {
+        return notes;
+    }
+
 }
