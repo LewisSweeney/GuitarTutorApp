@@ -4,4 +4,9 @@
     <string name="tuning_spinner_title">Tuning</string>
     <string name="notes_file_name">csv/notes.csv</string>
     <string name="tuning_file_name">csv/tunings.csv</string>
+    <string name="tightenText">Tighten this string!</string>
+    <string name="inTuneText">In Tune!</string>
+    <string name="loosenText">Loosen this string!</string>
+    <string name="playPromptText">Play a string!</string>
+    <string name="standard_tuning">Standard Tuning</string>
 </resources>

@@ -2,10 +2,13 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.MediaPlayer;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
@@ -37,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     Note[] notes;
     Tuning tuning;
     NotesViewModel notesView;
+    int noteCorrectIndicator = 0;
+    final int noteCorrectLimit = 20;
 
 
     @Override
@@ -97,7 +104,11 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        processPitch(pitchInHz);
+                        try {
+                            processPitch(pitchInHz);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 });
             }
@@ -115,9 +126,9 @@ public class MainActivity extends AppCompatActivity {
      * This method takes the current frequency being detected and converts the frequency of the note
      * to the nearest note in the chosen instrument tuning.
      *
-     * @param pitchInHz
+     * @param pitchInHz This is the current pitch being picked up by the microphone
      */
-    public void processPitch(float pitchInHz) {
+    public void processPitch(float pitchInHz) throws IOException {
         Note currentNotePlayed = null;
         Note[] tuningNotes = tuning.getNotes();
         for (int i = 0; i < tuningNotes.length; i++) {
@@ -145,31 +156,41 @@ public class MainActivity extends AppCompatActivity {
         Note previousNote = notesView.getNoteBefore(currentNoteId);
         Note nextNote = notesView.getNoteAfter(currentNoteId);
 
+        float frequencyDifferenceDown = currentNotePlayed.getFrequency() - previousNote.getFrequency();
+        float frequencyDifferenceUp = nextNote.getFrequency() - currentNotePlayed.getFrequency();
+
+        float centDown = frequencyDifferenceDown / 100;
+        float centUp = frequencyDifferenceUp / 100;
+
 
         if (currentNotePlayed != null) {
             noteText.setText(currentNotePlayed.getNoteName());
         }
         if (pitchInHz < currentNotePlayed.getFrequency()) {
-            indicatorText.setText("Tighten this string!");
+            indicatorText.setText(getString(R.string.tightenText));
             indicatorText.setTextColor(Color.RED);
+            noteCorrectIndicator = 0;
         } else if (pitchInHz > currentNotePlayed.getFrequency()) {
-            indicatorText.setText("Loosen this string!");
+            indicatorText.setText(getString(R.string.loosenText));
             indicatorText.setTextColor(Color.RED);
-        } else {
-            indicatorText.setText("Perfect!");
+            noteCorrectIndicator = 0;
+        } else if (pitchInHz >= pitchInHz - (5 * centDown) && pitchInHz <= pitchInHz + (5 * centUp)) {
+            indicatorText.setText(getString(R.string.inTuneText));
             indicatorText.setTextColor(Color.GREEN);
+            noteCorrectIndicator++;
         }
         if (pitchInHz == -1.0) {
             noteText.setText("---");
-            indicatorText.setText("Play a string!");
+            indicatorText.setText(getString(R.string.playPromptText));
             indicatorText.setTextColor(Color.BLACK);
         }
 
+        checkNoteIsInTune();
 
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case ACCESS_REQUESTED: {
                 // If request is cancelled, the result arrays are empty.
@@ -183,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
                     // functionality that depends on this permission.
                     Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
                 }
-                return;
             }
 
             // other 'case' lines to check for other
@@ -216,5 +236,17 @@ public class MainActivity extends AppCompatActivity {
         mAudioTrack.stop();
         mAudioTrack.release();
     }
+
+    private void checkNoteIsInTune() throws IOException {
+        if (noteCorrectIndicator >= noteCorrectLimit) {
+            noteCorrectIndicator = 0;
+            AssetFileDescriptor afd = getAssets().openFd("sounds/correct.mp3");
+            MediaPlayer mPlayer = new MediaPlayer();
+            mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            mPlayer.prepare();
+            mPlayer.start();
+        }
+    }
 }
+
 

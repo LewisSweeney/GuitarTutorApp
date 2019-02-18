@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 
 @Entity(tableName= "notes")
 public class Note {
-    @NonNull
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -32,6 +31,10 @@ public class Note {
 
     public void setFrequency(short frequency) {
         this.frequency = frequency;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Note(String noteName, float frequency){
