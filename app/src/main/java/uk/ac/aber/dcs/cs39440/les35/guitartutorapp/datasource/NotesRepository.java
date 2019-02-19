@@ -46,7 +46,7 @@ public class NotesRepository {
     }
 
     public Note getNoteAfter(int id){
-        Note note = noteDAO.getNoteBefore(id);
+        Note note = noteDAO.getNoteAfter(id);
         return note;
     }
 

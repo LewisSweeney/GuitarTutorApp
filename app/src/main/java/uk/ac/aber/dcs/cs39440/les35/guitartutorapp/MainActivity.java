@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     TextView indicatorText;
     Button testSounds;
     Note[] notes;
+    Note previousNoteDetected;
     Tuning tuning;
     NotesViewModel notesView;
     int noteCorrectIndicator = 0;
@@ -162,11 +163,19 @@ public class MainActivity extends AppCompatActivity {
         float centDown = frequencyDifferenceDown / 100;
         float centUp = frequencyDifferenceUp / 100;
 
+        System.out.println("CENT UP = " + centUp + " AND CENT DOWN = " + centDown);
+
 
         if (currentNotePlayed != null) {
             noteText.setText(currentNotePlayed.getNoteName());
         }
-        if (pitchInHz < currentNotePlayed.getFrequency()) {
+
+        if (pitchInHz >= currentNotePlayed.getFrequency() - (5 * centDown) && pitchInHz <= currentNotePlayed.getFrequency() + (5 * centUp)) {
+            indicatorText.setText(getString(R.string.inTuneText));
+            indicatorText.setTextColor(Color.GREEN);
+            noteCorrectIndicator++;
+            checkNoteIsInTune();
+        } else if (pitchInHz < currentNotePlayed.getFrequency()) {
             indicatorText.setText(getString(R.string.tightenText));
             indicatorText.setTextColor(Color.RED);
             noteCorrectIndicator = 0;
@@ -174,20 +183,18 @@ public class MainActivity extends AppCompatActivity {
             indicatorText.setText(getString(R.string.loosenText));
             indicatorText.setTextColor(Color.RED);
             noteCorrectIndicator = 0;
-        } else if (pitchInHz >= pitchInHz - (5 * centDown) && pitchInHz <= pitchInHz + (5 * centUp)) {
-            indicatorText.setText(getString(R.string.inTuneText));
-            indicatorText.setTextColor(Color.GREEN);
-            noteCorrectIndicator++;
         }
+
         if (pitchInHz == -1.0) {
             noteText.setText("---");
             indicatorText.setText(getString(R.string.playPromptText));
             indicatorText.setTextColor(Color.BLACK);
         }
 
-        checkNoteIsInTune();
+        previousNoteDetected = currentNotePlayed;
 
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -240,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkNoteIsInTune() throws IOException {
         if (noteCorrectIndicator >= noteCorrectLimit) {
             noteCorrectIndicator = 0;
+            System.out.println(noteCorrectIndicator);
             AssetFileDescriptor afd = getAssets().openFd("sounds/correct.mp3");
             MediaPlayer mPlayer = new MediaPlayer();
             mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
