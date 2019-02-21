@@ -55,16 +55,61 @@
     </!-->
 
 
-    <TextView
-        android:id="@+id/tuningName"
+
+
+    <GridLayout
+        android:id="@+id/tuningNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/standard_tuning"
-        android:textSize="32sp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:numColumns="6"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/noteText"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/tuningNoteOne"
+            android:textSize="32sp"
+            android:layout_columnWeight="1"
+            android:padding="4dp"
+            android:layout_column="0" />
+
+        <TextView
+            android:id="@+id/tuningNoteTwo"
+            android:textSize="32sp"
+            android:layout_columnWeight="1"
+            android:padding="4dp"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/tuningNoteThree"
+            android:textSize="32sp"
+            android:layout_columnWeight="1"
+            android:padding="4dp"
+            android:layout_column="2" />
+
+        <TextView
+            android:id="@+id/tuningNoteFour"
+            android:textSize="32sp"
+            android:layout_columnWeight="1"
+            android:padding="4dp"
+            android:layout_column="3" />
+
+        <TextView
+            android:id="@+id/tuningNoteFive"
+            android:textSize="32sp"
+            android:layout_columnWeight="1"
+            android:padding="4dp"
+            android:layout_column="4" />
+
+        <TextView
+            android:id="@+id/tuningNoteSix"
+            android:textSize="32sp"
+            android:layout_columnWeight="1"
+            android:padding="4dp"
+            android:layout_column="5" />
+    </GridLayout>
+
     <TextView
         android:id="@+id/noteText"
         android:layout_width="wrap_content"
@@ -83,6 +128,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/noteText" />
+
     <!-->
    <Button
        android:id="@+id/testSound"

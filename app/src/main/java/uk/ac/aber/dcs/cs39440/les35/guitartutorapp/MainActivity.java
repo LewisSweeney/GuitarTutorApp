@@ -3,6 +3,7 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
     Note previousNoteDetected;
     Tuning tuning;
     NotesViewModel notesView;
+    ColorStateList oldColor;
+    TextView[] tuningNoteNames = new TextView[6];
+
+    Thread audioThread;
     int noteCorrectIndicator = 0;
     final int noteCorrectLimit = 20;
 
@@ -78,14 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         noteText = findViewById(R.id.noteText);
         indicatorText = findViewById(R.id.indicatorText);
-        // testSounds = findViewById(R.id.testSound);
 
-       /* testSounds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playSound(110, 88200);
-            }
-        }); */
 
         notes = notesView.getAllNotesAsList();
 
@@ -96,6 +94,21 @@ public class MainActivity extends AppCompatActivity {
         tuningNotes[3] = notesView.getNoteByName("G3");
         tuningNotes[4] = notesView.getNoteByName("B3");
         tuningNotes[5] = notesView.getNoteByName("E4");
+
+        tuningNoteNames[0] = findViewById(R.id.tuningNoteOne);
+        tuningNoteNames[1] = findViewById(R.id.tuningNoteTwo);
+        tuningNoteNames[2] = findViewById(R.id.tuningNoteThree);
+        tuningNoteNames[3] = findViewById(R.id.tuningNoteFour);
+        tuningNoteNames[4] = findViewById(R.id.tuningNoteFive);
+        tuningNoteNames[5] = findViewById(R.id.tuningNoteSix);
+
+        oldColor = tuningNoteNames[0].getTextColors();
+
+        for (int i = 0; i < tuningNotes.length; i++){
+            tuningNoteNames[i].setText(tuningNotes[i].getNoteName());
+        }
+
+
         tuning = new Tuning("E Standard", InstrumentType.GUITAR, tuningNotes);
 
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
@@ -114,11 +127,11 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
-        AudioProcessor pitchProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
+        AudioProcessor pitchProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.AMDF, 22050, 1024, pdh);
         dispatcher.addAudioProcessor(pitchProcessor);
 
 
-        Thread audioThread = new Thread(dispatcher, "Audio Thread");
+        audioThread = new Thread(dispatcher, "Audio Thread");
 
         audioThread.start();
     }
@@ -166,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("CENT UP = " + centUp + " AND CENT DOWN = " + centDown);
 
 
+
+
         if (currentNotePlayed != null) {
             noteText.setText(currentNotePlayed.getNoteName());
         }
@@ -185,11 +200,24 @@ public class MainActivity extends AppCompatActivity {
             noteCorrectIndicator = 0;
         }
 
+        for(int i = 0; i < tuningNoteNames.length; i++){
+            if(currentNotePlayed.getNoteName().equals(tuningNoteNames[i].getText())){
+                tuningNoteNames[i].setTextColor(getResources().getColor(R.color.colorNoteIndication));
+            } else{
+                tuningNoteNames[i].setTextColor(oldColor);
+            }
+        }
+
+
         if (pitchInHz == -1.0) {
             noteText.setText("---");
             indicatorText.setText(getString(R.string.playPromptText));
-            indicatorText.setTextColor(Color.BLACK);
+            indicatorText.setTextColor(oldColor);
+            for(int i = 0; i < tuningNoteNames.length; i++){
+                tuningNoteNames[i].setTextColor(oldColor);
+            }
         }
+
 
         previousNoteDetected = currentNotePlayed;
 
@@ -254,6 +282,18 @@ public class MainActivity extends AppCompatActivity {
             mPlayer.prepare();
             mPlayer.start();
         }
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        audioThread.interrupt();
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        audioThread.interrupt();
     }
 }
 
