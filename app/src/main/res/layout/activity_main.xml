@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+
 
     <!--
     <LinearLayout
@@ -62,8 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numColumns="6"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/noteText"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -114,11 +116,10 @@
         android:id="@+id/noteText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="96sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="48sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tuningNotes" />
 
     <TextView
         android:id="@+id/indicatorText"
@@ -127,7 +128,30 @@
         android:layout_marginTop="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noteText" />
+        app:layout_constraintTop_toBottomOf="@id/needle" />
+
+
+
+        <ImageView
+            android:id="@+id/semicircle"
+            android:src="@drawable/drawable_semicircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/noteText"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <ImageView
+            android:id="@+id/needle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/drawable_tuning_needle"
+            app:layout_constraintTop_toBottomOf="@id/semicircle"
+            app:layout_constraintBottom_toBottomOf="@id/semicircle"
+            app:layout_constraintLeft_toLeftOf="@id/semicircle"
+            app:layout_constraintRight_toRightOf="@id/semicircle"
+            app:layout_anchorGravity="bottom|center" />
+
 
     <!-->
    <Button

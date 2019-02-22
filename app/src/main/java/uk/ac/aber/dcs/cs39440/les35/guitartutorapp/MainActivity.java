@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -14,7 +15,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     TextView noteText;
     TextView indicatorText;
     Button testSounds;
+    ImageView needle;
     Note[] notes;
     Note previousNoteDetected;
     Tuning tuning;
@@ -81,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        needle = findViewById(R.id.needle);
+
+        needle.setRotation((float) 34);
+
         noteText = findViewById(R.id.noteText);
         indicatorText = findViewById(R.id.indicatorText);
 
@@ -104,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         oldColor = tuningNoteNames[0].getTextColors();
 
-        for (int i = 0; i < tuningNotes.length; i++){
+        for (int i = 0; i < tuningNotes.length; i++) {
             tuningNoteNames[i].setText(tuningNotes[i].getNoteName());
         }
 
@@ -176,11 +186,6 @@ public class MainActivity extends AppCompatActivity {
         float centDown = frequencyDifferenceDown / 100;
         float centUp = frequencyDifferenceUp / 100;
 
-        System.out.println("CENT UP = " + centUp + " AND CENT DOWN = " + centDown);
-
-
-
-
         if (currentNotePlayed != null) {
             noteText.setText(currentNotePlayed.getNoteName());
         }
@@ -189,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
             indicatorText.setText(getString(R.string.inTuneText));
             indicatorText.setTextColor(Color.GREEN);
             noteCorrectIndicator++;
+            needle.setRotation(0);
             checkNoteIsInTune();
         } else if (pitchInHz < currentNotePlayed.getFrequency()) {
             indicatorText.setText(getString(R.string.tightenText));
@@ -200,25 +206,61 @@ public class MainActivity extends AppCompatActivity {
             noteCorrectIndicator = 0;
         }
 
-        for(int i = 0; i < tuningNoteNames.length; i++){
-            if(currentNotePlayed.getNoteName().equals(tuningNoteNames[i].getText())){
+        for (int i = 0; i < tuningNoteNames.length; i++) {
+            if (currentNotePlayed.getNoteName().equals(tuningNoteNames[i].getText())) {
                 tuningNoteNames[i].setTextColor(getResources().getColor(R.color.colorNoteIndication));
-            } else{
+            } else {
                 tuningNoteNames[i].setTextColor(oldColor);
             }
         }
 
+        double oneSectionOfGauge = 0.9;
+        System.out.println();
+
+        RotateAnimation rotate;
+        if (pitchInHz < currentNotePlayed.getFrequency()) {
+            float angle;
+            for (int i = 1; i < 100; i++) {
+                if (pitchInHz < currentNotePlayed.getFrequency() - (i * centDown) && pitchInHz > previousNote.getFrequency() + ((99 - i) * centDown)) {
+                    needle.clearAnimation();
+
+                    angle = i * (float) oneSectionOfGauge;
+                    System.out.println("SETTING ANGLE NEG: " + angle);
+                    needle.setRotation(-angle);
+                    break;
+                }
+                if (pitchInHz < currentNotePlayed.getFrequency() - (100 * centDown)) {
+                    needle.setRotation(-90);
+                }
+            }
+        } else if (pitchInHz > currentNotePlayed.getFrequency()) {
+            float angle;
+            for (int i = 1; i < 100; i++) {
+                if (pitchInHz > currentNotePlayed.getFrequency() + (i * centDown) && pitchInHz < nextNote.getFrequency() - ((99 - i) * centDown)) {
+                    needle.clearAnimation();
+
+                    angle = i * (float) oneSectionOfGauge;
+                    System.out.println("SETTING ANGLE POS: " + angle);
+
+                    needle.setRotation(angle);
+                    break;
+                }
+            }
+            if (pitchInHz > currentNotePlayed.getFrequency() + (100 * centUp)) {
+                needle.setRotation(90);
+            }
+        }
 
         if (pitchInHz == -1.0) {
             noteText.setText("---");
+
+            needle.setRotation(0);
             indicatorText.setText(getString(R.string.playPromptText));
             indicatorText.setTextColor(oldColor);
-            for(int i = 0; i < tuningNoteNames.length; i++){
+            for (int i = 0; i < tuningNoteNames.length; i++) {
                 tuningNoteNames[i].setTextColor(oldColor);
             }
         }
-
-
         previousNoteDetected = currentNotePlayed;
 
     }
@@ -285,15 +327,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         audioThread.interrupt();
     }
 
     @Override
-    protected void onRestart(){
+    protected void onRestart() {
         super.onRestart();
         audioThread.interrupt();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        audioThread.interrupt();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+      super.onConfigurationChanged(newConfig);
+
     }
 }
 
