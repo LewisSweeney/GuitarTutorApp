@@ -9,16 +9,10 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.util.List;
-import java.util.concurrent.Executors;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.MainActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesDAO;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.TuningDAO;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.MyApplication;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
 @Database(entities = {Note.class/*, Tuning.class*/}, version = 1)
 
@@ -81,7 +75,7 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
             try {
                 CsvReader reader = new CsvReader("csv/notes.csv", MyApplication.getAppContext());
-                reader.readFile();
+                reader.readNotes();
                 Note[] notes = reader.getNotes();
                 notesDAO.insertNotes(notes);
 

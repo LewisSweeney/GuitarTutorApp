@@ -40,7 +40,7 @@ public class CsvReader {
 
     }
 
-    public void readFile(){
+    public void readNotes() {
         if (filename.equals(context.getResources().getString(R.string.notes_file_name))) {
             try {
                 int i = 0;
@@ -50,6 +50,59 @@ public class CsvReader {
                     notes[i] = note;
                     System.out.println("ADDING ITEM");
                     i++;
+                }
+            } catch (IOException exception) {
+                Log.e("CSV Reader", "Error " + line, exception);
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    public void readTunings(Note[] notesFromDB) {
+        if (filename.equals(context.getResources().getString(R.string.tuning_file_name))) {
+            try {
+                int i = 0;
+                while ((line = reader.readLine()) != null) {
+                    String[] lineSplit = line.split(",");
+
+                    // Get tuning name
+                    String tuningName = lineSplit[0];
+
+                    // Get instrument type for tuning
+                    String instrumentTypeAsString = lineSplit[1];
+                    InstrumentType instrumentType = InstrumentType.GUITAR;
+                    switch (instrumentTypeAsString) {
+                        case "GUITAR":
+                            instrumentType = InstrumentType.GUITAR;
+                            break;
+                        case "BASS":
+                            instrumentType = InstrumentType.BASS;
+                            break;
+                        case "UKULELE":
+                            instrumentType = InstrumentType.UKULELE;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // Get notes for tuning
+
+                    List<Note> notesForTuning = new ArrayList<>();
+                    for (int j = 2; j < lineSplit.length; j++) {
+                        String currentNoteName = lineSplit[j];
+                        if (!currentNoteName.equals("N/A")) {
+                            for (Note aNotesFromDB : notesFromDB) {
+                                if (aNotesFromDB.getNoteName().equals(currentNoteName)) {
+                                    notesForTuning.add(aNotesFromDB);
+                                }
+                            }
+                        }
+                    }
+
+                    Tuning tuning = new Tuning(tuningName, instrumentType, notesForTuning);
+                    tunings.add(tuning);
+
+
                 }
             } catch (IOException exception) {
                 Log.e("CSV Reader", "Error " + line, exception);

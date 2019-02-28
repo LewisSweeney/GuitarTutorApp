@@ -1,6 +1,7 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects;
 
-import android.arch.persistence.room.Entity;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class to hold the tunings available for instruments on the app
@@ -11,16 +12,27 @@ public class Tuning {
     private int id;
     private String tuningName;
     private InstrumentType instrument;
-    private Note[] notes;
+    private List<Note> notes = new ArrayList<>();
 
-    public Tuning(String tuningName, InstrumentType instrument, Note[] notes) {
+    public Tuning(String tuningName, InstrumentType instrument, List<Note> notes) {
         this.tuningName = tuningName;
         this.instrument = instrument;
-        this.notes = notes;
+        this.notes.addAll(notes);
     }
 
-    public Note[] getNotes() {
+    public List<Note> getNotes() {
         return notes;
     }
 
+    public InstrumentType getInstrument(){
+        return instrument;
+    }
+
+    public String getTuningName() {
+        return tuningName;
+    }
+
+    public void setTuningName(String tuningName) {
+        this.tuningName = tuningName;
+    }
 }

@@ -9,4 +9,10 @@
     <string name="loosenText">Loosen this string!</string>
     <string name="playPromptText">Play a string!</string>
     <string name="standard_tuning">Standard Tuning</string>
+
+    <string-array name="instrument_spinner_array">
+        <item>Guitar</item>
+        <item>Bass</item>
+        <item>Ukulele</item>
+    </string-array>
 </resources>

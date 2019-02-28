@@ -15,15 +15,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
+import android.view.View;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
@@ -32,6 +36,7 @@ import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
@@ -48,10 +53,13 @@ public class MainActivity extends AppCompatActivity {
     ImageView needle;
     Note[] notes;
     Note previousNoteDetected;
-    Tuning tuning;
+    Tuning currentlySelectedTuning;
+    List<Tuning> tunings;
     NotesViewModel notesView;
     ColorStateList oldColor;
     TextView[] tuningNoteNames = new TextView[6];
+    Spinner instrumentSpinner;
+    Spinner tuningSpinner;
 
     Thread audioThread;
     int noteCorrectIndicator = 0;
@@ -86,24 +94,16 @@ public class MainActivity extends AppCompatActivity {
             dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
         }
 
-
+        noteText = findViewById(R.id.noteText);
+        indicatorText = findViewById(R.id.indicatorText);
+        instrumentSpinner = findViewById(R.id.instrumentSpinner);
+        tuningSpinner = findViewById(R.id.tuningSpinner);
         needle = findViewById(R.id.needle);
 
         needle.setRotation((float) 34);
 
-        noteText = findViewById(R.id.noteText);
-        indicatorText = findViewById(R.id.indicatorText);
 
-
-        notes = notesView.getAllNotesAsList();
-
-        Note[] tuningNotes = new Note[6];
-        tuningNotes[0] = notesView.getNoteByName("E2");
-        tuningNotes[1] = notesView.getNoteByName("A2");
-        tuningNotes[2] = notesView.getNoteByName("D3");
-        tuningNotes[3] = notesView.getNoteByName("G3");
-        tuningNotes[4] = notesView.getNoteByName("B3");
-        tuningNotes[5] = notesView.getNoteByName("E4");
+        List<Note> tuningNotes = new ArrayList<>();
 
         tuningNoteNames[0] = findViewById(R.id.tuningNoteOne);
         tuningNoteNames[1] = findViewById(R.id.tuningNoteTwo);
@@ -114,12 +114,20 @@ public class MainActivity extends AppCompatActivity {
 
         oldColor = tuningNoteNames[0].getTextColors();
 
-        for (int i = 0; i < tuningNotes.length; i++) {
-            tuningNoteNames[i].setText(tuningNotes[i].getNoteName());
+        try {
+            CsvReader reader = new CsvReader("csv/tunings.csv", this.getApplicationContext());
+            reader.readTunings(notesView.getAllNotesAsList());
+            tunings = reader.getTunings();
+            currentlySelectedTuning = tunings.get(0);
+            tuningNotes = currentlySelectedTuning.getNotes();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        for (int i = 0; i < tuningNotes.size(); i++) {
+            tuningNoteNames[i].setText(tuningNotes.get(i).getNoteName());
+        }
 
-        tuning = new Tuning("E Standard", InstrumentType.GUITAR, tuningNotes);
 
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
@@ -137,6 +145,39 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
+
+
+        ArrayAdapter<CharSequence> instrumentAdapter = ArrayAdapter.createFromResource(
+                this, R.array.instrument_spinner_array, android.R.layout.simple_spinner_item);
+        instrumentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        instrumentSpinner.setAdapter(instrumentAdapter);
+        instrumentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                setTuningSpinner();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+        setTuningSpinner();
+        tuningSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                changeTuning();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
         AudioProcessor pitchProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.AMDF, 22050, 1024, pdh);
         dispatcher.addAudioProcessor(pitchProcessor);
 
@@ -148,30 +189,30 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method takes the current frequency being detected and converts the frequency of the note
-     * to the nearest note in the chosen instrument tuning.
+     * to the nearest note in the chosen instrument currentlySelectedTuning.
      *
      * @param pitchInHz This is the current pitch being picked up by the microphone
      */
     public void processPitch(float pitchInHz) throws IOException {
         Note currentNotePlayed = null;
-        Note[] tuningNotes = tuning.getNotes();
-        for (int i = 0; i < tuningNotes.length; i++) {
-            float currentNoteFreq = tuningNotes[i].getFrequency();
+        List<Note> tuningNotes = currentlySelectedTuning.getNotes();
+        for (int i = 0; i < tuningNotes.size(); i++) {
+            float currentNoteFreq = tuningNotes.get(i).getFrequency();
             if (i == 0) {
-                float freqDifferenceUp = tuningNotes[i + 1].getFrequency() - currentNoteFreq;
-                if (pitchInHz <= tuningNotes[i].getFrequency() + (freqDifferenceUp / 2)) {
-                    currentNotePlayed = tuningNotes[i];
+                float freqDifferenceUp = tuningNotes.get(i + 1).getFrequency() - currentNoteFreq;
+                if (pitchInHz <= tuningNotes.get(i).getFrequency() + (freqDifferenceUp / 2)) {
+                    currentNotePlayed = tuningNotes.get(i);
                 }
-            } else if (i == tuningNotes.length - 1) {
-                float freqDifferenceDown = currentNoteFreq - tuningNotes[i - 1].getFrequency();
+            } else if (i == tuningNotes.size() - 1) {
+                float freqDifferenceDown = currentNoteFreq - tuningNotes.get(i - 1).getFrequency();
                 if (pitchInHz >= currentNoteFreq - (freqDifferenceDown / 2)) {
-                    currentNotePlayed = tuningNotes[i];
+                    currentNotePlayed = tuningNotes.get(i);
                 }
             } else {
-                float freqDifferenceUp = tuningNotes[i + 1].getFrequency() - currentNoteFreq;
-                float freqDifferenceDown = currentNoteFreq - tuningNotes[i - 1].getFrequency();
-                if (pitchInHz >= currentNoteFreq - (freqDifferenceDown / 2) && pitchInHz <= tuningNotes[i].getFrequency() + (freqDifferenceUp / 2)) {
-                    currentNotePlayed = tuningNotes[i];
+                float freqDifferenceUp = tuningNotes.get(i + 1).getFrequency() - currentNoteFreq;
+                float freqDifferenceDown = currentNoteFreq - tuningNotes.get(i - 1).getFrequency();
+                if (pitchInHz >= currentNoteFreq - (freqDifferenceDown / 2) && pitchInHz <= tuningNotes.get(i).getFrequency() + (freqDifferenceUp / 2)) {
+                    currentNotePlayed = tuningNotes.get(i);
                 }
             }
         }
@@ -339,14 +380,76 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         audioThread.interrupt();
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig){
-      super.onConfigurationChanged(newConfig);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+    }
+
+    private void setTuningSpinner() {
+        String selectedInstrumentAsString = instrumentSpinner.getSelectedItem().toString();
+        InstrumentType selectedInstrument;
+        switch (selectedInstrumentAsString) {
+            case "Guitar":
+                selectedInstrument = InstrumentType.GUITAR;
+                break;
+            case "Bass":
+                selectedInstrument = InstrumentType.BASS;
+                break;
+            case "Ukulele":
+                selectedInstrument = InstrumentType.UKULELE;
+                break;
+            default:
+                selectedInstrument = InstrumentType.GUITAR;
+        }
+
+        List<String> tuningsForSpinner = new ArrayList<>();
+        for (Tuning t : tunings) {
+            if (t.getInstrument() == selectedInstrument) {
+                tuningsForSpinner.add(t.getTuningName());
+            }
+        }
+
+        String[] tuningNamesAsArray = new String[tuningsForSpinner.size()];
+
+        for (int i = 0; i < tuningsForSpinner.size(); i++) {
+            tuningNamesAsArray[i] = tuningsForSpinner.get(i);
+        }
+
+
+        ArrayAdapter<String> tuningSpinnerArrayAdapter = new ArrayAdapter<>(this,   android.R.layout.simple_spinner_item, tuningNamesAsArray);
+        tuningSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tuningSpinner.setAdapter(tuningSpinnerArrayAdapter);
+
+        changeTuning();
+
+    }
+
+    private void changeTuning(){
+        String selectedTuningAsString = tuningSpinner.getSelectedItem().toString();
+        for(Tuning t: tunings){
+            if(t.getTuningName().equals(selectedTuningAsString)){
+                currentlySelectedTuning = t;
+            }
+        }
+
+        List<Note> tuningNotes = new ArrayList<>();
+        tuningNotes = currentlySelectedTuning.getNotes();
+
+        // Empties current note names
+        for(int i = 0; i < tuningNoteNames.length; i++){
+            tuningNoteNames[i].setText("");
+        }
+
+        // Sets new note names
+        for (int i = 0; i < tuningNotes.size(); i++) {
+            tuningNoteNames[i].setText(tuningNotes.get(i).getNoteName());
+        }
 
     }
 }

@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NoteGridTheme">
+        <item name="android:textSize">32sp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
 </resources>
