@@ -9,6 +9,7 @@
     <string name="loosenText">Loosen this string!</string>
     <string name="playPromptText">Play a string!</string>
     <string name="standard_tuning">Standard Tuning</string>
+    <string name="sound_intune">sounds/correct.mp3</string>
 
     <string-array name="instrument_spinner_array">
         <item>Guitar</item>
