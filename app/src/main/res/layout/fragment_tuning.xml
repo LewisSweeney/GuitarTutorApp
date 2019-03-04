@@ -1,0 +1,164 @@
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:id="@+id/fragment_tuning"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/spinner_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/instrumentSpinnerTitle"
+                android:text="@string/instrument_spinner_title" />
+
+            <Spinner
+                android:id="@+id/instrumentSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/black"
+                android:dropDownWidth="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/instrumentSpinnerTitle"></Spinner>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:paddingTop="5dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tuningSpinnerTitle"
+                android:text="@string/tuning_spinner_title" />
+
+            <Spinner
+                android:id="@+id/tuningSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/black"
+                android:dropDownWidth="match_parent"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/tuningSpinnerTitle"></Spinner>
+
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+
+
+
+
+
+    <GridLayout
+        android:id="@+id/tuningNotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numColumns="6"
+        app:layout_constraintTop_toBottomOf="@id/spinner_section"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/tuningNoteOne"
+            style="@style/NoteGridTheme"
+            android:layout_column="0" />
+
+        <TextView
+            android:id="@+id/tuningNoteTwo"
+            style="@style/NoteGridTheme"
+            android:layout_column="1" />
+
+        <TextView
+            android:id="@+id/tuningNoteThree"
+            style="@style/NoteGridTheme"
+            android:layout_column="2" />
+
+        <TextView
+            android:id="@+id/tuningNoteFour"
+            style="@style/NoteGridTheme"
+            android:layout_column="3" />
+
+        <TextView
+            android:id="@+id/tuningNoteFive"
+            style="@style/NoteGridTheme"
+            android:layout_column="4" />
+
+        <TextView
+            android:id="@+id/tuningNoteSix"
+            style="@style/NoteGridTheme"
+            android:layout_column="5" />
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/noteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="48sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tuningNotes" />
+
+    <TextView
+        android:id="@+id/indicatorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/semicircle" />
+
+
+    <ImageView
+        android:id="@+id/semicircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/drawable_gauge"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/noteText" />
+
+    <ImageView
+        android:id="@+id/needle"
+        android:layout_width="wrap_content"
+        android:layout_height="281dp"
+        android:src="@drawable/drawable_needle"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@id/semicircle"
+        app:layout_constraintBottom_toBottomOf="@id/semicircle"
+        app:layout_constraintLeft_toLeftOf="@id/semicircle"
+        app:layout_constraintRight_toRightOf="@id/semicircle"
+        app:layout_anchorGravity="bottom|center" />
+
+
+    <!-->
+   <Button
+       android:id="@+id/testSound"
+       app:layout_constraintLeft_toLeftOf="parent"
+       app:layout_constraintRight_toRightOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintBottom_toTopOf="@id/noteText"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+       </!-->
+
+
+</android.support.constraint.ConstraintLayout>

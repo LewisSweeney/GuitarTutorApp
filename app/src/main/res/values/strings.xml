@@ -2,18 +2,62 @@
     <string name="app_name">GuitarTutorApp</string>
     <string name="instrument_spinner_title">Instrument</string>
     <string name="tuning_spinner_title">Tuning</string>
+
     <string name="notes_file_name">csv/notes.csv</string>
     <string name="tuning_file_name">csv/tunings.csv</string>
+    <string name="chords_file_name">csv/chords.csv</string>
+
     <string name="tightenText">Tighten this string!</string>
     <string name="inTuneText">In Tune!</string>
     <string name="loosenText">Loosen this string!</string>
     <string name="playPromptText">Play a string!</string>
     <string name="standard_tuning">Standard Tuning</string>
     <string name="sound_intune">sounds/correct.mp3</string>
+    <string name="tuner_tab">Tuner</string>
+    <string name="learn_tab">Learn</string>
 
     <string-array name="instrument_spinner_array">
         <item>Guitar</item>
         <item>Bass</item>
         <item>Ukulele</item>
     </string-array>
+
+    <string-array name="learning_options_array">
+        <item>Chords</item>
+        <item>Guitar Tabs</item>
+        <item>Scales</item>
+        <item>Note Playback</item>
+        <item>Note Recognition</item>
+    </string-array>
+
+    <string-array name="learning_descriptions_array">
+        <item>See chord diagrams</item>
+        <item>Learn how to read and play guitar tablature</item>
+        <item>Learn various scales on your guitar</item>
+        <item>Play requested notes to test your knowledge of the fretboard</item>
+        <item>Test your note recognition skills with this little game</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="root_notes_array">
+        <item>A</item>
+        <item>A#/Bb</item>
+        <item>B</item>
+        <item>C</item>
+        <item>C#/Db</item>
+        <item>D</item>
+        <item>D#/Eb</item>
+        <item>E</item>
+        <item>F</item>
+        <item>F#/Gb</item>
+        <item>G</item>
+        <item>G#/Ab</item>
+    </string-array>
+
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="title_activity_chords">ChordsActivity</string>
+    <string name="chord_root_spinner_title">Root Note</string>
+    <string name="chord_spinner_title">Chord</string>
+
 </resources>

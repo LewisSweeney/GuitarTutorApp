@@ -60,7 +60,7 @@ public class NotesRepository {
         @Override
         protected Void doInBackground(Note... params) {
             System.out.println("inserting at repo");
-            // Calls the insert multiple words method as it supports inserting just one item
+            // Calls the insert multiple notes method as it supports inserting just one item
             mAsyncTaskDao.insertNotes(params);
             return null;
         }

@@ -4,23 +4,29 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.List;
 
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordDAO;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesDAO;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.MyApplication;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 
-@Database(entities = {Note.class/*, Tuning.class*/}, version = 1)
+@Database(entities = {Note.class, Chord.class}, version = 2
+)
 
 public abstract class GuitarRoomDatabase extends RoomDatabase {
 
     private static GuitarRoomDatabase INSTANCE;
 
     public abstract NotesDAO getNotesDao();
+    public abstract ChordDAO getChordsDao();
 
     // public abstract TuningDAO getTuningDao();
 
@@ -29,8 +35,7 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (GuitarRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            GuitarRoomDatabase.class, "guitar_database").allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), GuitarRoomDatabase.class, "guitar_database").allowMainThreadQueries().addMigrations(MIGRATION_1_2).addCallback(sRoomDatabaseCallback).build();
                      /* Do the following when migrating
                      to a new version of the database
                      INSTANCE =
@@ -51,7 +56,6 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
 
         public void onCreate(SupportSQLiteDatabase db) {
             super.onCreate(db);
-            System.out.println("TRYING TO ADD");
             new PopulateDbAsync(INSTANCE).execute();
 
         }
@@ -67,17 +71,27 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final NotesDAO notesDAO;
+        private final ChordDAO chordDAO;
 
-        PopulateDbAsync(GuitarRoomDatabase db){
+        PopulateDbAsync(GuitarRoomDatabase db) {
             notesDAO = db.getNotesDao();
+            chordDAO = db.getChordsDao();
         }
+
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                CsvReader reader = new CsvReader("csv/notes.csv", MyApplication.getAppContext());
+                CsvReader reader = new CsvReader(MyApplication.getAppContext());
+
                 reader.readNotes();
                 Note[] notes = reader.getNotes();
+
+                reader.readChords();
+
+                Chord[] chords = reader.getChords();
+
                 notesDAO.insertNotes(notes);
+                chordDAO.insertChords(chords);
 
             } catch (IOException e) {
                 System.out.println("CAUGHT");
@@ -86,4 +100,11 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
             return null;
         }
     }
+
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `chords` (`id` INTEGER, " + "`name` TEXT, " + " `notes` TEXT, " + " `startFret` INTEGER, PRIMARY KEY(`id`))");
+        }
+    };
 }

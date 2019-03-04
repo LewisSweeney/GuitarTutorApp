@@ -27,7 +27,6 @@ public class NotesViewModel extends AndroidViewModel {
      * @param note
      */
     public void insert(Note[] note) {
-        System.out.println("inserting at view model");
         repo.insert(note);
     }
 
