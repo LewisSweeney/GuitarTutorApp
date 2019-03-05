@@ -148,6 +148,26 @@
         app:layout_constraintRight_toRightOf="@id/semicircle"
         app:layout_anchorGravity="bottom|center" />
 
+    <TextView
+        android:id="@+id/note_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="35dp"
+        app:layout_constraintTop_toBottomOf="@id/semicircle"
+        app:layout_constraintBottom_toBottomOf="@id/semicircle"
+        app:layout_constraintLeft_toLeftOf="@id/semicircle"
+        app:layout_anchorGravity="bottom|left"/>
+
+    <TextView
+        android:id="@+id/note_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="35dp"
+        app:layout_constraintTop_toBottomOf="@id/semicircle"
+        app:layout_constraintBottom_toBottomOf="@id/semicircle"
+        app:layout_constraintRight_toRightOf="@id/semicircle"
+        app:layout_anchorGravity="bottom|right"/>
+
 
     <!-->
    <Button

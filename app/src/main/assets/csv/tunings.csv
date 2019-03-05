@@ -1,4 +1,10 @@
-﻿E Standard,GUITAR,E2,A2,D3,G3,B3,E4
+﻿Standard,GUITAR,E2,A2,D3,G3,B3,E4
+Half Step Down,GUITAR,D#2,G#2,C#3,F#3,A#3,D#4
+Full Step Down,GUITAR,D2,G2,C3,F3,A3,D4
 Drop D,GUITAR,D2,A2,D3,G3,B3,E4
+DADGAD/Celtic,GUITAR,D2,A2,D3,G3,A3,D4
 Bass Standard,BASS,E1,A1,D2,G2,N/A,N/A
-Ukulele Standard,UKULELE,G4,C4,E4,A4,N/A,N/A
+Bass Half Step Down,BASS,D#1,G#1,C#2,F#2,N/A,N/A
+Bass Step Down,BASS,D1,G1,C2,F2,N/A,N/A
+Soprano/Tenor Ukulele,UKULELE,G4,C4,E4,A4,N/A,N/A
+Baritone Ukulele,UKULELE,D3,G3,B3,E4,N/A,N/A

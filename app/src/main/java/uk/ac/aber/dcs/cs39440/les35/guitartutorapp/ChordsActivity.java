@@ -1,12 +1,19 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,16 +28,27 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 
 public class ChordsActivity extends AppCompatActivity {
 
-    TextView chordTest;
+    final int TOP_MARGIN_OF_CHART_FOR_MARKERS =  48;
+    final int PADDING_INCREASE_FOR_MARKERS = 45;
+
+    TextView chordNameTextView;
     Spinner rootNoteSpinner;
     Spinner chordSpinner;
     Chord[] chords;
-    Boolean[][] chordChart = new Boolean[5][5];
+    ImageView[] fretMarkers = new ImageView[6];
+
     Chord currentChord;
+
+    Canvas canvas;
+    Paint paint = new Paint();
+    Bitmap bitmap;
+    ImageView mImageView;
 
     ChordsViewModel chordsViewModel;
 
     Canvas chordCanvas;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +59,16 @@ public class ChordsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         chordsViewModel = new ChordsViewModel(this.getApplication());
 
-        chordTest = findViewById(R.id.chordNoteTest);
+        chordNameTextView = findViewById(R.id.chordName);
         rootNoteSpinner = findViewById(R.id.chordRootSpinner);
         chordSpinner = findViewById(R.id.chordSpinner);
+        getFretMarkers();
+
         try {
             CsvReader reader = new CsvReader(this);
             reader.readChords();
@@ -56,7 +79,6 @@ public class ChordsActivity extends AppCompatActivity {
         System.out.println(chordsViewModel.getAllChordsAsList().length);
         System.out.println("CHORDS LIST SIZE = " + chords.length);
         setupSpinners();
-
     }
 
     private void setupSpinners() {
@@ -160,7 +182,6 @@ public class ChordsActivity extends AppCompatActivity {
         List<Chord> chordsForSpinner = new ArrayList<>();
         char[] rootAsArray = root.toCharArray();
 
-        System.out.println("TRYING TO GET CHORDS FOR SPINNER");
         if (rootAsArray.length == 2) {
             for (Chord c : chords) {
                 String chordName = c.getName();
@@ -192,15 +213,40 @@ public class ChordsActivity extends AppCompatActivity {
     }
 
     private void changeChord() {
-        for(Chord c : chords){
-            if(chordSpinner.getSelectedItem().toString().equals(c.getName())){
+        for (Chord c : chords) {
+            if (chordSpinner.getSelectedItem().toString().equals(c.getName())) {
                 currentChord = c;
             }
         }
+        drawChord();
     }
 
-    private void drawChord(){
+    private void getFretMarkers(){
+        fretMarkers[0] = findViewById(R.id.fret_marker_one);
+        fretMarkers[1] = findViewById(R.id.fret_marker_two);
+        fretMarkers[2] = findViewById(R.id.fret_marker_three);
+        fretMarkers[3] = findViewById(R.id.fret_marker_four);
+        fretMarkers[4] = findViewById(R.id.fret_marker_five);
+        fretMarkers[5] = findViewById(R.id.fret_marker_six);
 
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(25, 25);
+        layoutParams.setMargins(0,0, 0,0);
+        fretMarkers[0].setLayoutParams(layoutParams);
+        fretMarkers[0].bringToFront();
+    }
+
+    private void drawChord() {
+        chordNameTextView.setText(currentChord.getName());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return false;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

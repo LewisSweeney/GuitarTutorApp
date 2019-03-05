@@ -77,6 +77,8 @@ public class TuningFragment extends Fragment {
 
     // Views for the tuning screen
     TextView noteText;
+    TextView noteDown;
+    TextView noteUp;
     TextView indicatorText;
     TextView[] tuningNoteNames = new TextView[6];
     ImageView needle;
@@ -131,6 +133,8 @@ public class TuningFragment extends Fragment {
 
         // Finds the views required for the tuner screen
         noteText = view.getRootView().findViewById(R.id.noteText);
+        noteUp = view.getRootView().findViewById(R.id.note_up);
+        noteDown = view.getRootView().findViewById(R.id.note_down);
         indicatorText = view.getRootView().findViewById(R.id.indicatorText);
         instrumentSpinner = view.getRootView().findViewById(R.id.instrumentSpinner);
         tuningSpinner = view.getRootView().findViewById(R.id.tuningSpinner);
@@ -216,6 +220,8 @@ public class TuningFragment extends Fragment {
         float centUp = frequencyDifferenceUp / 100;
 
         noteText.setText(currentClosestNote.getNoteName());
+        noteUp.setText(nextChromaticNote.getNoteName());
+        noteDown.setText(previousChromaticNote.getNoteName());
 
         if (pitchInHz >= currentClosestNote.getFrequency() - (tuningLeeway * centDown) && pitchInHz <= currentClosestNote.getFrequency() + (tuningLeeway * centUp)) {
             indicatorText.setText(getString(R.string.inTuneText));
@@ -257,7 +263,6 @@ public class TuningFragment extends Fragment {
                     needle.clearAnimation();
 
                     angle = i * (float) oneSectionOfGauge;
-                    System.out.println("SETTING ANGLE NEG: " + angle);
                     needle.setRotation(-angle);
                     break;
                 }
@@ -272,9 +277,6 @@ public class TuningFragment extends Fragment {
                     needle.clearAnimation();
 
                     angle = i * (float) oneSectionOfGauge;
-                    System.out.println("NUMBER OF NOTES : " + notesView.getAllNotesAsList().length);
-                    System.out.println("SETTING ANGLE POS: " + angle);
-
                     needle.setRotation(angle);
                     break;
                 }
@@ -286,7 +288,8 @@ public class TuningFragment extends Fragment {
 
         if (pitchInHz == -1.0) {
             noteText.setText("---");
-
+            noteUp.setText("");
+            noteDown.setText("");
             needle.setRotation(0);
             indicatorText.setText(getString(R.string.playPromptText));
             indicatorText.setTextColor(oldColor);
