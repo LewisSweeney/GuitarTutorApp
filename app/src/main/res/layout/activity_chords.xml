@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:dropDownWidth="match_parent"
                 app:backgroundTint="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/chordRootSpinnerTitle"></Spinner>
+                app:layout_constraintTop_toBottomOf="@id/chordRootSpinnerTitle" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -68,13 +68,13 @@
                 android:dropDownWidth="match_parent"
                 android:textSize="22sp"
                 app:backgroundTint="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/chordSpinnerTitle"></Spinner>
+                app:layout_constraintTop_toBottomOf="@id/chordSpinnerTitle" />
 
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/chordName"
+        android:id="@+id/chord_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -83,98 +83,24 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spinner_chords" />
 
-
-
-    <ImageView
-        android:layout_width="300dp"
+    <TextView
+        android:id="@+id/chord_start_fret"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:id="@+id/chord_chart"
-        android:paddingLeft="25dp"
-        android:paddingTop="15dp"
-        android:paddingRight="25dp"
-        android:src="@drawable/drawable_chord_chart"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:paddingTop="40dp"
+        android:textSize="18sp"
+        android:fontFamily="monospace"
+        app:layout_constraintLeft_toRightOf="@id/chord_view"
+        app:layout_constraintRight_toRightOf="@id/chord_view"
+        app:layout_constraintTop_toTopOf="@id/chord_view"/>
+
+    <uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView
+        android:id="@+id/chord_view"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/chord_title"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chordName" />
-
-    <ImageView
-        android:id="@+id/fret_marker_one"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/drawable_chord_fret_marker"
-        android:paddingTop="48dp"
-        android:layout_marginStart="52dp"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintLeft_toLeftOf="@id/chord_chart"
-        app:layout_constraintRight_toRightOf="@id/chord_chart"
-        app:layout_constraintTop_toTopOf="@id/chord_chart" />
-
-    <ImageView
-        android:id="@+id/fret_marker_two"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/drawable_chord_fret_marker"
-        android:paddingTop="48dp"
-        android:layout_marginStart="104dp"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintLeft_toLeftOf="@id/chord_chart"
-        app:layout_constraintRight_toRightOf="@id/chord_chart"
-        app:layout_constraintTop_toTopOf="@id/chord_chart" />
-
-    <ImageView
-        android:id="@+id/fret_marker_three"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/drawable_chord_fret_marker"
-        android:paddingTop="48dp"
-        android:layout_marginStart="156dp"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintLeft_toLeftOf="@id/chord_chart"
-        app:layout_constraintRight_toRightOf="@id/chord_chart"
-        app:layout_constraintTop_toTopOf="@id/chord_chart" />
-
-    <ImageView
-        android:id="@+id/fret_marker_four"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/drawable_chord_fret_marker"
-        android:paddingTop="48dp"
-        android:layout_marginStart="208dp"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintLeft_toLeftOf="@id/chord_chart"
-        app:layout_constraintRight_toRightOf="@id/chord_chart"
-        app:layout_constraintTop_toTopOf="@id/chord_chart" />
-
-    <ImageView
-        android:id="@+id/fret_marker_five"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/drawable_chord_fret_marker"
-        android:paddingTop="48dp"
-        android:layout_marginStart="260dp"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintLeft_toLeftOf="@id/chord_chart"
-        app:layout_constraintRight_toRightOf="@id/chord_chart"
-        app:layout_constraintTop_toTopOf="@id/chord_chart" />
-
-    <ImageView
-        android:id="@+id/fret_marker_six"
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/drawable_chord_fret_marker"
-        android:paddingTop="48dp"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintLeft_toLeftOf="@id/chord_chart"
-        app:layout_constraintRight_toRightOf="@id/chord_chart"
-        app:layout_constraintTop_toTopOf="@id/chord_chart" />
-
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>

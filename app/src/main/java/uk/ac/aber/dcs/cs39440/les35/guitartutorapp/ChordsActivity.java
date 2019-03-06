@@ -8,12 +8,10 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,32 +20,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordsViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 
 
 public class ChordsActivity extends AppCompatActivity {
 
-    final int TOP_MARGIN_OF_CHART_FOR_MARKERS =  48;
+    final int TOP_MARGIN_OF_CHART_FOR_MARKERS = 48;
     final int PADDING_INCREASE_FOR_MARKERS = 45;
+    final int STRINGS_ON_GUITAR = 6;
 
     TextView chordNameTextView;
+    TextView chordFretTextView;
     Spinner rootNoteSpinner;
     Spinner chordSpinner;
     Chord[] chords;
-    ImageView[] fretMarkers = new ImageView[6];
 
+    GuitarChordView chordView;
     Chord currentChord;
 
-    Canvas canvas;
-    Paint paint = new Paint();
-    Bitmap bitmap;
-    ImageView mImageView;
 
     ChordsViewModel chordsViewModel;
-
-    Canvas chordCanvas;
-
 
 
     @Override
@@ -56,18 +50,21 @@ public class ChordsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chords);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        chordView = findViewById(R.id.chord_view);
+        chordView.showFingerNumbers(false);
+        chordView.showFretNumbers(false);
         chordsViewModel = new ChordsViewModel(this.getApplication());
 
-        chordNameTextView = findViewById(R.id.chordName);
+        chordNameTextView = findViewById(R.id.chord_title);
+        chordFretTextView = findViewById(R.id.chord_start_fret);
         rootNoteSpinner = findViewById(R.id.chordRootSpinner);
         chordSpinner = findViewById(R.id.chordSpinner);
-        getFretMarkers();
 
         try {
             CsvReader reader = new CsvReader(this);
@@ -221,22 +218,25 @@ public class ChordsActivity extends AppCompatActivity {
         drawChord();
     }
 
-    private void getFretMarkers(){
-        fretMarkers[0] = findViewById(R.id.fret_marker_one);
-        fretMarkers[1] = findViewById(R.id.fret_marker_two);
-        fretMarkers[2] = findViewById(R.id.fret_marker_three);
-        fretMarkers[3] = findViewById(R.id.fret_marker_four);
-        fretMarkers[4] = findViewById(R.id.fret_marker_five);
-        fretMarkers[5] = findViewById(R.id.fret_marker_six);
-
-        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(25, 25);
-        layoutParams.setMargins(0,0, 0,0);
-        fretMarkers[0].setLayoutParams(layoutParams);
-        fretMarkers[0].bringToFront();
-    }
-
     private void drawChord() {
+        char[] notesAsCharArray = currentChord.getNotes().toCharArray();
+        String startFretString = getResources().getString(R.string.start_fret_label) + currentChord.getStartFret().toString();
         chordNameTextView.setText(currentChord.getName());
+        chordFretTextView.setText(startFretString);
+        chordView.clear();
+        for (int i = 0; i < STRINGS_ON_GUITAR; i++) {
+            System.out.println("CURRENT NOTE = " + notesAsCharArray[i]);
+            System.out.println("CURRENT STRING = " + i + 1);
+            if (notesAsCharArray[i] == 'x') {
+                chordView.addNote(-1, 6 - i, 0);
+            } else if (notesAsCharArray[i] == '0') {
+                // Nothing defaults to an open string, which is what 0 indicates
+                ;
+            } else {
+                int fret = Character.getNumericValue(notesAsCharArray[i]);
+                chordView.addNote(fret, 6 - i, 0);
+            }
+        }
     }
 
     @Override

@@ -56,8 +56,11 @@
     </string-array>
 
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
-    <string name="title_activity_chords">ChordsActivity</string>
+    <string name="title_activity_main">String Along</string>
+    <string name="title_activity_chords">Chords</string>
+    <string name="title_activity_tab">Tabs</string>
     <string name="chord_root_spinner_title">Root Note</string>
     <string name="chord_spinner_title">Chord</string>
+    <string name="start_fret_label">Fret:</string>
 
 </resources>
