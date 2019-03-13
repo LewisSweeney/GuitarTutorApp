@@ -35,8 +35,6 @@ public class CsvReader {
         am = context.getAssets();
         this.context = context;
         notes = new Note[108];
-
-
     }
 
     public void readNotes() throws IOException {

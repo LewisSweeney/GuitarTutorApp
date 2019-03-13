@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="number_of_notes">1</integer>
+    <integer name="max_bpm_metronome">208</integer>
+    <integer name="min_bpm_metronome">40</integer>
 </resources>

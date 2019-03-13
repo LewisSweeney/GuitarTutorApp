@@ -125,6 +125,10 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
                 intent = new Intent(context, NoteRecognitionActivity.class);
                 context.startActivity(intent);
                 break;
+            case 5:
+                intent = new Intent(context, MetronomeActivity.class);
+                context.startActivity(intent);
+                break;
         }
     }
 

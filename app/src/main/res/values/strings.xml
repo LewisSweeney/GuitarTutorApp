@@ -22,12 +22,22 @@
         <item>Ukulele</item>
     </string-array>
 
+    <string-array name="tab_string_notes">
+        <item>e</item>
+        <item>B</item>
+        <item>G</item>
+        <item>D</item>
+        <item>A</item>
+        <item>E</item>
+    </string-array>
+
     <string-array name="learning_options_array">
         <item>Chords</item>
         <item>Guitar Tabs</item>
         <item>Scales</item>
         <item>Note Playback</item>
         <item>Note Recognition</item>
+        <item>Metronome</item>
     </string-array>
 
     <string-array name="learning_descriptions_array">
@@ -36,9 +46,8 @@
         <item>Learn various scales on your guitar</item>
         <item>Play requested notes to test your knowledge of the fretboard</item>
         <item>Test your note recognition skills with this little game</item>
+        <item>Use a metronome to practice playing to the rhythm</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="root_notes_array">
         <item>A</item>
@@ -62,5 +71,6 @@
     <string name="chord_root_spinner_title">Root Note</string>
     <string name="chord_spinner_title">Chord</string>
     <string name="start_fret_label">Fret:</string>
+    <string name="tab_spinner_title">Tab Name</string>
 
 </resources>

@@ -49,13 +49,13 @@ public class ChordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chords);
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
+
         chordView = findViewById(R.id.chord_view);
         chordView.showFingerNumbers(false);
         chordView.showFretNumbers(false);
