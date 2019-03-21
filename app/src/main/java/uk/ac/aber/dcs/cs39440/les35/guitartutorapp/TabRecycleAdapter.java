@@ -27,7 +27,7 @@ public class TabRecycleAdapter extends RecyclerView.Adapter<TabRecycleAdapter.Ta
      * Constructor for the WordListAdapter
      * @param context
      */
-    TabRecycleAdapter(Context context){LayoutInflater inflater = LayoutInflater.from(context);
+    public TabRecycleAdapter(Context context){LayoutInflater inflater = LayoutInflater.from(context);
     }
 
     /**

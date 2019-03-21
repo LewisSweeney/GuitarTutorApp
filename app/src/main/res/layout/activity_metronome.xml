@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uk.ac.aber.dcs.cs39440.les35.guitartutorapp.MetronomeActivity">
+    tools:context="uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.MetronomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -21,22 +21,60 @@
     </android.support.design.widget.AppBarLayout>
 
     <TextView
+        android:id="@+id/switch_metronome_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:text="@string/metronome_switch"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+    <Switch
+        android:id="@+id/switch_metronome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/switch_metronome_title"
+        app:layout_constraintStart_toStartOf="@+id/switch_metronome_title"
+        app:layout_constraintTop_toBottomOf="@id/switch_metronome_title" />
+
+    <TextView
         android:id="@+id/bpm_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/bpm_title"
+        android:paddingStart="20dp"
+        app:layout_constraintLeft_toRightOf="@id/beats_title"/>
 
     <TextView
         android:id="@+id/time_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/beats_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:text="@string/beats_title"/>
+
     <NumberPicker
         android:id="@+id/bpm_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/bpm_title"
+        app:layout_constraintLeft_toRightOf="@id/beats_title"
+        app:layout_constraintTop_toBottomOf="@id/bpm_title"
+        app:layout_constraintBottom_toTopOf="@id/current_beat"
+        android:theme="@style/DefaultNumberPickerTheme" />
+
+    <NumberPicker
+        android:id="@+id/beat_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/beats_title"
+        app:layout_constraintTop_toBottomOf="@id/beats_title"
         app:layout_constraintBottom_toTopOf="@id/current_beat"
         android:theme="@style/DefaultNumberPickerTheme" />
 

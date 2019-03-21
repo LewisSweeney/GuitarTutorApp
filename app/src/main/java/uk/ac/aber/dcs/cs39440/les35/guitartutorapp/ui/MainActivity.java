@@ -1,5 +1,8 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui;
 
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,8 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-
-
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.LearnFragment;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.TuningFragment;
 
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
         ViewPager pager = findViewById(R.id.pager);
         pager.setAdapter(pagerAdapter);
 
+
         // This builds the tab section which is used to display which Fragment is currently
         // being displayed on screen
         TabLayout tabLayout = findViewById(R.id.tabs);
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
 
     }
 
-    /* !!!CURRENTLY UNUSED METHOD. MAY BE USED AT A LATER DATE!!!
+    /* !!!CURRENTLY UNUSED METHOD. MAY BE USED AT A LATER DATE!!! */
     private void playSound(double frequency, int duration) {
         // AudioTrack definition
         int mBufferSize = AudioTrack.getMinBufferSize(44100,
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
         mAudioTrack.write(mBuffer, 0, mSound.length);
         mAudioTrack.stop();
         mAudioTrack.release();
-    }*/
+    }
 
 
 
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
 
 
 
-    /**
+      /**
      * This inner class is used to get the current Fragment that should be displayed, along with
      * getting the name for the current tab selected
      */
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
             return null;
         }
     }
+
 
 }
 

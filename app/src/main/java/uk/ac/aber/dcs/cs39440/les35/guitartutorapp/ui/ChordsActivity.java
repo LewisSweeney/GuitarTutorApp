@@ -1,17 +1,12 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.SpinnerAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordsViewModel;

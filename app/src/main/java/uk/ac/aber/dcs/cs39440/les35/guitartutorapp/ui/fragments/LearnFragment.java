@@ -1,6 +1,5 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,9 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +24,11 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
 public class LearnFragment extends Fragment {
 
     LearnListAdapter adapter;
+    RecyclerView listLearn;
 
     public LearnFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +46,8 @@ public class LearnFragment extends Fragment {
             learnListItems.add(l);
         }
 
-        RecyclerView listLearn = view.getRootView().findViewById(R.id.learn_list);
+        listLearn = view.getRootView().findViewById(R.id.learn_list);
+        listLearn.setMotionEventSplittingEnabled(false);
         listLearn.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
 
         adapter = new LearnListAdapter(this.getActivity());
@@ -61,6 +58,12 @@ public class LearnFragment extends Fragment {
 
         return view;
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        adapter.isClickable = true;
     }
 
     /**

@@ -9,16 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.MyApplication;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.ChordsActivity;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TabActivity;
 
 public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.LearnViewHolder> {
 
     private List<LearnItem> learnItemList;
     private Context context;
+    public boolean isClickable = true;
 
 
     /**
@@ -104,31 +107,44 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
 
     private void itemClicked(int position) {
         Intent intent;
-        switch (position) {
-            case 0:
-                intent = new Intent(context, ChordsActivity.class);
-                context.startActivity(intent);
-                break;
-            case 1:
-                intent = new Intent(context, TabActivity.class);
-                context.startActivity(intent);
-                break;
-            case 2:
-                intent = new Intent(context, ScalesActivity.class);
-                context.startActivity(intent);
-                break;
-            case 3:
-                intent = new Intent(context, NotePlaybackActivity.class);
-                context.startActivity(intent);
-                break;
-            case 4:
-                intent = new Intent(context, NoteRecognitionActivity.class);
-                context.startActivity(intent);
-                break;
-            case 5:
-                intent = new Intent(context, MetronomeActivity.class);
-                context.startActivity(intent);
-                break;
+        if (isClickable) {
+            Toast toast = Toast.makeText(context, "This feature is under development", Toast.LENGTH_SHORT);
+            switch (position) {
+                case 0:
+                    intent = new Intent(context, ChordsActivity.class);
+                    context.startActivity(intent);
+                    isClickable = false;
+                    break;
+                case 1:
+                    intent = new Intent(context, TabActivity.class);
+                    context.startActivity(intent);
+                    isClickable = false;
+                    break;
+                case 2:
+                    //intent = new Intent(context, ScalesActivity.class);
+                    // context.startActivity(intent);
+                    // isClickable = false;
+                    toast.show();
+                    break;
+                case 3:
+                    //intent = new Intent(context, NotePlaybackActivity.class);
+                    //context.startActivity(intent);
+                    // isClickable = false;
+                    toast.show();
+                    break;
+                case 4:
+                    //intent = new Intent(context, NoteRecognitionActivity.class);
+                    //context.startActivity(intent);
+                    // isClickable = false;
+                    toast.show();
+                    break;
+                case 5:
+               /* intent = new Intent(context, MetronomeActivity.class);
+                context.startActivity(intent);*/
+                    // isClickable = false;
+                    toast.show();
+                    break;
+            }
         }
     }
 

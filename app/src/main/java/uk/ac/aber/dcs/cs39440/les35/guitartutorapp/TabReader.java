@@ -126,5 +126,9 @@ public class TabReader {
         return stave;
     }
 
+    public List<Integer> getTabNoteIds(){
+        return tabNoteIds;
+    }
+
 
 }

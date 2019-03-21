@@ -1,0 +1,127 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.TabActivity">
+
+
+    <TextView
+        android:id="@+id/tab_spinner_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/tab_spinner_title"
+        app:layout_constraintLeft_toLeftOf="@id/tab_spinner" />
+
+    <Spinner
+        android:id="@+id/tab_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:dropDownWidth="match_parent"
+        app:backgroundTint="@color/black"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_spinner_title" />
+
+    <TextView
+        android:id="@+id/tab_listen_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/tab_listen_title"
+
+        app:layout_constraintBottom_toTopOf="@+id/switch_listen"
+        app:layout_constraintStart_toStartOf="@+id/switch_listen" />
+
+    <Switch
+        android:id="@+id/switch_listen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/tab_recycler"
+        app:layout_constraintStart_toEndOf="@+id/radiogroup_autoscroll"
+        app:layout_constraintTop_toTopOf="@+id/radiogroup_autoscroll" />
+
+    <TextView
+        android:id="@+id/tab_autoscroll_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/tab_autoscroll_title"
+        app:layout_constraintBottom_toTopOf="@+id/radiogroup_autoscroll"
+        app:layout_constraintLeft_toLeftOf="@id/tab_spinner"
+        app:layout_constraintTop_toBottomOf="@id/tab_spinner" />
+
+    <RadioGroup
+        android:id="@+id/radiogroup_autoscroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="@id/tab_spinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_autoscroll_title">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/autoscroll_off"
+                android:buttonTint="@color/black"/>
+
+            <RadioButton
+                android:id="@+id/radio_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/autoscroll_medium"
+                android:buttonTint="@color/black"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_slow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/autoscroll_slow"
+                android:buttonTint="@color/black"/>
+
+            <RadioButton
+                android:id="@+id/radio_fast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/autoscroll_fast"
+                android:buttonTint="@color/black"/>
+        </LinearLayout>
+    </RadioGroup>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tab_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:paddingBottom="58dp"
+        android:clipToPadding="false"
+        android:scrollbarSize="5dp"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbars="vertical"
+        android:fitsSystemWindows="true"
+        app:layout_constraintTop_toBottomOf="@id/radiogroup_autoscroll"
+        tools:listitem="@layout/tab_layout" />
+
+
+</android.support.constraint.ConstraintLayout>

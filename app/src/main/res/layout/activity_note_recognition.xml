@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uk.ac.aber.dcs.cs39440.les35.guitartutorapp.NoteRecognitionActivity">
+    tools:context="uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.NoteRecognitionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -25,5 +25,7 @@
             app:tabTextColor="@color/colorWhite"/>
 
     </android.support.design.widget.AppBarLayout>
+
+    
 
 </android.support.constraint.ConstraintLayout>

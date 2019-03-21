@@ -33,4 +33,6 @@ public interface NotesDAO {
     @Query("SELECT * FROM notes WHERE id = :id+1")
     Note getNoteAfter(int id);
 
+    @Query("SELECT * FROM notes WHERE id = :id")
+    Note getNoteById(int id);
 }

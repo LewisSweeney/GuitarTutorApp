@@ -3,6 +3,7 @@
     package="uk.ac.aber.dcs.cs39440.les35.guitartutorapp">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".objects.MyApplication"
@@ -13,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait">
@@ -25,17 +26,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChordsActivity"
+            android:name=".ui.ChordsActivity"
             android:label="@string/title_activity_chords"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".TabActivity"
+            android:name=".ui.TabActivity"
             android:label="@string/title_activity_tab"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ScalesActivity" />
-        <activity android:name=".NotePlaybackActivity" />
-        <activity android:name=".NoteRecognitionActivity" />
-        <activity android:name=".MetronomeActivity"></activity>
+        <activity android:name=".ui.ScalesActivity" />
+        <activity android:name=".ui.NotePlaybackActivity" />
+        <activity android:name=".ui.NoteRecognitionActivity" />
+        <activity android:name=".ui.MetronomeActivity"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import android.arch.lifecycle.ViewModelProviders;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,6 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.SpinnerAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
@@ -60,6 +58,7 @@ public class TuningFragment extends Fragment {
     // Determines the size of one "cent" section of the tuning gauge
     final double oneSectionOfGauge = 0.9;
 
+    // Notes 5 cents either way of the exact frequency
     final double tuningLeeway = 5;
 
     // Integer that determines how many "checks" of the current frequency must be in tune for a string
@@ -532,14 +531,28 @@ public class TuningFragment extends Fragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        audioThread.interrupt();
+        dispatcher.stop();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
+        audioThread.interrupt();
         dispatcher.stop();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
         checkPermissions();
     }
 
