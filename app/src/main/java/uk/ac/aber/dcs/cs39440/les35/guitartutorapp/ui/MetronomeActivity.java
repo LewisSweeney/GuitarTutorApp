@@ -17,6 +17,8 @@ import static java.lang.Thread.sleep;
 
 public class MetronomeActivity extends AppCompatActivity {
 
+    final static int ONE_MINUTE_IN_SECONDS = 60;
+
     NumberPicker bpmPicker;
     NumberPicker beatPicker;
 
@@ -29,6 +31,12 @@ public class MetronomeActivity extends AppCompatActivity {
     Boolean metronomeActive = false;
 
     TextView metronomeBeat;
+
+    int beatsPerBar;
+
+    int currentBeat = 1;
+
+    long timeBetweenBeats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,12 @@ public class MetronomeActivity extends AppCompatActivity {
         bpmPicker.setMaxValue(getResources().getInteger(R.integer.max_bpm_metronome));
         bpmPicker.setMinValue(getResources().getInteger(R.integer.min_bpm_metronome));
         bpmPicker.setWrapSelectorWheel(false);
+        bpmPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                setTimeBetweenBeats();
+            }
+        });
 
         beatPicker = findViewById(R.id.beat_picker);
         beatPicker.setMaxValue(getResources().getInteger(R.integer.max_beat_value));
@@ -100,7 +114,28 @@ public class MetronomeActivity extends AppCompatActivity {
     private void metronomeTick() throws InterruptedException {
         if(metronomeActive) {
             vibrate.vibrate(150);
+            if(currentBeat < beatsPerBar){
+                currentBeat++;
+            }
+            else if(currentBeat == beatsPerBar ){
+                currentBeat = 1;
+            }
+            metronomeBeat.setText(currentBeat);
             sleep(250);
+
         }
+    }
+
+    private void setTimeBetweenBeats(){
+        if(metronomeSwitch.isChecked()){
+            metronomeSwitch.toggle();
+        }
+        int chosenBpmValue = bpmPicker.getValue();
+        long beatsPerSecond = chosenBpmValue / ONE_MINUTE_IN_SECONDS;
+        timeBetweenBeats = 1000 / beatsPerSecond;
+    }
+
+    private void setBeatsPerBar(){
+        beatsPerBar = beatPicker.getValue();
     }
 }
