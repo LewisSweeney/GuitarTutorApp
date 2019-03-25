@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
-import static java.lang.Thread.sleep;
-
 public class MetronomeActivity extends AppCompatActivity {
 
     final static int ONE_MINUTE_IN_SECONDS = 60;
@@ -36,7 +34,7 @@ public class MetronomeActivity extends AppCompatActivity {
 
     int currentBeat = 1;
 
-    long timeBetweenBeats;
+    double timeBetweenBeats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +51,7 @@ public class MetronomeActivity extends AppCompatActivity {
         bpmPicker = findViewById(R.id.bpm_picker);
         bpmPicker.setMaxValue(getResources().getInteger(R.integer.max_bpm_metronome));
         bpmPicker.setMinValue(getResources().getInteger(R.integer.min_bpm_metronome));
+        bpmPicker.setValue(100);
         bpmPicker.setWrapSelectorWheel(false);
         bpmPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -65,8 +64,9 @@ public class MetronomeActivity extends AppCompatActivity {
         beatPicker.setMaxValue(getResources().getInteger(R.integer.max_beat_value));
         beatPicker.setMinValue(getResources().getInteger(R.integer.min_beat_value));
         beatPicker.setWrapSelectorWheel(false);
+        beatPicker.setValue(4);
 
-        metronomeSwitch = findViewById(R.id.switch_listen);
+        metronomeSwitch = findViewById(R.id.switch_metronome);
         metronomeBeat = findViewById(R.id.current_beat);
 
         vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -74,7 +74,7 @@ public class MetronomeActivity extends AppCompatActivity {
         vibrateThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while (true) {
                     try {
                         metronomeTick();
                     } catch (InterruptedException e) {
@@ -87,18 +87,19 @@ public class MetronomeActivity extends AppCompatActivity {
         metronomeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!vibrateThread.isAlive()){
+                if (!vibrateThread.isAlive()) {
                     vibrateThread.start();
                 }
-                if(metronomeActive){
+                if (metronomeActive) {
                     metronomeActive = false;
-                }
-                else if(!metronomeActive){
+                } else if (!metronomeActive) {
                     metronomeActive = true;
                 }
 
             }
         });
+
+        setTimeBetweenBeats();
     }
 
     @Override
@@ -112,30 +113,50 @@ public class MetronomeActivity extends AppCompatActivity {
     }
 
     private void metronomeTick() throws InterruptedException {
-        if(metronomeActive) {
+        if (metronomeActive) {
             vibrate.vibrate(150);
-            if(currentBeat < beatsPerBar){
+            if (currentBeat < beatsPerBar) {
                 currentBeat++;
-            }
-            else if(currentBeat == beatsPerBar ){
+            } else if (currentBeat == beatsPerBar) {
                 currentBeat = 1;
             }
-            metronomeBeat.setText(currentBeat);
-            sleep(250);
+//            metronomeBeat.setText(currentBeat);
+            double toMicro = round(timeBetweenBeats, 3);
+            int nanoseconds = (int) toMicro * 1000000;
+            long milliseconds = 0;
+            while(nanoseconds >= 1000000){
+                nanoseconds = nanoseconds - 1000000;
+                milliseconds++;
+            }
+            Thread.sleep(milliseconds,nanoseconds);
 
         }
     }
 
-    private void setTimeBetweenBeats(){
-        if(metronomeSwitch.isChecked()){
+    private void setTimeBetweenBeats() {
+        if (metronomeSwitch.isChecked()) {
             metronomeSwitch.toggle();
+            metronomeActive = false;
         }
         int chosenBpmValue = bpmPicker.getValue();
-        long beatsPerSecond = chosenBpmValue / ONE_MINUTE_IN_SECONDS;
-        timeBetweenBeats = 1000 / beatsPerSecond;
+        System.out.println(chosenBpmValue);
+        double beatsPerSecond;
+        beatsPerSecond = (double) chosenBpmValue / ONE_MINUTE_IN_SECONDS;
+        System.out.println(beatsPerSecond);
+        timeBetweenBeats = (double)1000 / beatsPerSecond;
+        System.out.println(timeBetweenBeats);
     }
 
-    private void setBeatsPerBar(){
+    private void setBeatsPerBar() {
         beatsPerBar = beatPicker.getValue();
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }

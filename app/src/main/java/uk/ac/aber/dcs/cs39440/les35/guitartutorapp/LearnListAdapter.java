@@ -15,6 +15,7 @@ import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.ChordsActivity;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.MetronomeActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TabActivity;
 
 public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.LearnViewHolder> {
@@ -139,10 +140,9 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
                     toast.show();
                     break;
                 case 5:
-               /* intent = new Intent(context, MetronomeActivity.class);
-                context.startActivity(intent);*/
-                    // isClickable = false;
-                    toast.show();
+                    intent = new Intent(context, MetronomeActivity.class);
+                    context.startActivity(intent);
+                    isClickable = false;
                     break;
             }
         }
