@@ -6,11 +6,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import be.tarsos.dsp.synthesis.SineGenerator;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
 public class MetronomeActivity extends AppCompatActivity {
@@ -32,9 +33,14 @@ public class MetronomeActivity extends AppCompatActivity {
 
     int beatsPerBar;
 
-    int currentBeat = 1;
+    int currentBeat = 99;
 
     double timeBetweenBeats;
+
+    SineGenerator sineGen;
+
+    int beatFreq = 440;
+    int barFreq = 880;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,12 @@ public class MetronomeActivity extends AppCompatActivity {
         beatPicker.setMinValue(getResources().getInteger(R.integer.min_beat_value));
         beatPicker.setWrapSelectorWheel(false);
         beatPicker.setValue(4);
+        beatPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                setBeatsPerBar();
+            }
+        });
 
         metronomeSwitch = findViewById(R.id.switch_metronome);
         metronomeBeat = findViewById(R.id.current_beat);
@@ -84,22 +96,25 @@ public class MetronomeActivity extends AppCompatActivity {
             }
         });
 
-        metronomeSwitch.setOnClickListener(new View.OnClickListener() {
+        metronomeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!vibrateThread.isAlive()) {
                     vibrateThread.start();
                 }
                 if (metronomeActive) {
-                    metronomeActive = false;
+                    deactivateMetronome();
                 } else if (!metronomeActive) {
                     metronomeActive = true;
                 }
-
             }
+
+
         });
 
         setTimeBetweenBeats();
+        setBeatsPerBar();
+        deactivateMetronome();
     }
 
     @Override
@@ -113,14 +128,22 @@ public class MetronomeActivity extends AppCompatActivity {
     }
 
     private void metronomeTick() throws InterruptedException {
+
         if (metronomeActive) {
-            vibrate.vibrate(150);
+
             if (currentBeat < beatsPerBar) {
                 currentBeat++;
-            } else if (currentBeat == beatsPerBar) {
+                vibrate.vibrate(150);
+            } else if (currentBeat >= beatsPerBar) {
                 currentBeat = 1;
+                vibrate.vibrate(200);
             }
-//            metronomeBeat.setText(currentBeat);
+            metronomeBeat.post(new Runnable() {
+                public void run() {
+                    changeBeat();
+                }
+            });
+
             double toMicro = round(timeBetweenBeats, 3);
             int nanoseconds = (int) toMicro * 1000000;
             long milliseconds = 0;
@@ -136,7 +159,7 @@ public class MetronomeActivity extends AppCompatActivity {
     private void setTimeBetweenBeats() {
         if (metronomeSwitch.isChecked()) {
             metronomeSwitch.toggle();
-            metronomeActive = false;
+            deactivateMetronome();
         }
         int chosenBpmValue = bpmPicker.getValue();
         System.out.println(chosenBpmValue);
@@ -148,7 +171,12 @@ public class MetronomeActivity extends AppCompatActivity {
     }
 
     private void setBeatsPerBar() {
+        if (metronomeSwitch.isChecked()) {
+            metronomeSwitch.toggle();
+            deactivateMetronome();
+        }
         beatsPerBar = beatPicker.getValue();
+        System.out.println(beatsPerBar);
     }
 
     public static double round(double value, int places) {
@@ -158,5 +186,22 @@ public class MetronomeActivity extends AppCompatActivity {
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
+    }
+
+    private void changeBeat(){
+        metronomeBeat.setText(String.valueOf(currentBeat));
+        if(metronomeBeat.getText().equals("1")){
+            metronomeBeat.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+        else{
+            metronomeBeat.setTextColor(getResources().getColor(R.color.black));
+        }
+    }
+
+    private void deactivateMetronome(){
+        metronomeActive = false;
+        metronomeBeat.setText("-");
+        metronomeBeat.setTextColor(getResources().getColor(R.color.black));
+        currentBeat = 99;
     }
 }
