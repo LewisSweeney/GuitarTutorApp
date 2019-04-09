@@ -14,10 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.SplashScreenActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -25,6 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ChordsActivity"
             android:label="@string/title_activity_chords"
@@ -36,7 +42,10 @@
         <activity android:name=".ui.ScalesActivity" />
         <activity android:name=".ui.NotePlaybackActivity" />
         <activity android:name=".ui.NoteRecognitionActivity" />
-        <activity android:name=".ui.MetronomeActivity"></activity>
+        <activity android:name=".ui.MetronomeActivity" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:label="@string/title_activity_settings" />
     </application>
 
 </manifest>

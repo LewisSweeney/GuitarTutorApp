@@ -3,7 +3,15 @@
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#03A9F4</color>
-    <color name="colorNoteIndication">#32CD32</color>
+
+
+    <color name="colorDarkThemePrimary">#212121</color>
+    <color name="colorDarkThemePrimaryDark">#000000</color>
+    <color name="colorDarkThemeBackground">#303030</color>
+    <color name="colorDarkThemeCards">#424242</color>
+    <color name="colorDarkThemeAccent">#FF3F80</color>
+
     <color name="colorWhite">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="colorNoteIndication">#32CD32</color>
 </resources>

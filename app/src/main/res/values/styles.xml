@@ -4,8 +4,21 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="background">@color/colorWhite</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
+
+    <style name="AppThemeDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorDarkThemePrimary</item>
+        <item name="colorPrimaryDark">@color/colorDarkThemePrimaryDark</item>
+        <item name="colorAccent">@color/colorDarkThemeAccent</item>
+        <item name="background">@color/colorDarkThemeBackground</item>
+        <item name="android:navigationBarColor">@color/colorDarkThemePrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorDarkThemePrimaryDark</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorControlNormal">@color/colorWhite</item>
@@ -36,6 +49,17 @@
 
     <style name="DefaultNumberPickerTheme" parent="AppTheme">
         <item name="colorControlNormal">@color/black</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black</item>
     </style>
 
 

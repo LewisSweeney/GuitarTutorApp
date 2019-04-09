@@ -58,6 +58,7 @@ public class ChordsActivity extends AppCompatActivity {
         chordView.showFretNumbers(false);
         chordsViewModel = new ChordsViewModel(this.getApplication());
 
+
         chordNameTextView = findViewById(R.id.chord_title);
         chordFretTextView = findViewById(R.id.chord_start_fret);
         rootNoteSpinner = findViewById(R.id.chordRootSpinner);

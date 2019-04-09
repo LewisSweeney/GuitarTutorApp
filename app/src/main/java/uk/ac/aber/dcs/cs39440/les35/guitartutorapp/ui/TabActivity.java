@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.TabLearnFragment;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.TabListFragment;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tabs.TabListFragment;
 
 public class TabActivity extends AppCompatActivity implements TabListFragment.OnFragmentInteractionListener, TabLearnFragment.OnFragmentInteractionListener{
 

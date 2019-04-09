@@ -47,7 +47,6 @@ public class MetronomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metronome);
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -189,7 +188,11 @@ public class MetronomeActivity extends AppCompatActivity {
     }
 
     private void changeBeat(){
+
         metronomeBeat.setText(String.valueOf(currentBeat));
+        if(currentBeat == 99){
+            metronomeBeat.setText("-");
+        }
         if(metronomeBeat.getText().equals("1")){
             metronomeBeat.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
@@ -200,8 +203,27 @@ public class MetronomeActivity extends AppCompatActivity {
 
     private void deactivateMetronome(){
         metronomeActive = false;
-        metronomeBeat.setText("-");
         metronomeBeat.setTextColor(getResources().getColor(R.color.black));
         currentBeat = 99;
+        metronomeBeat.setText("-");
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        deactivateMetronome();
+        if(metronomeSwitch.isChecked()){
+            metronomeSwitch.toggle();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        deactivateMetronome();
+        if(metronomeSwitch.isChecked()){
+            metronomeSwitch.toggle();
+        }
     }
 }

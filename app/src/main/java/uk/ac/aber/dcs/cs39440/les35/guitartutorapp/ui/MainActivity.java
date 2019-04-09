@@ -5,24 +5,28 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.LearnFragment;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.TuningFragment;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tuning.TuningFragment;
 
-public class MainActivity extends AppCompatActivity implements LearnFragment.OnFragmentInteractionListener, TuningFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements LearnFragment.OnFragmentInteractionListener, TuningFragment.OnFragmentInteractionListener {
 
+    DrawerLayout drawerLayout;
 
-
-
-       @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -30,6 +34,31 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
         // Adds the toolbar to the screen
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
+
 
         SectionsPagerAdapter pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         ViewPager pager = findViewById(R.id.pager);
@@ -76,12 +105,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
     }
 
 
-
-
-
-
-
-      /**
+    /**
      * This inner class is used to get the current Fragment that should be displayed, along with
      * getting the name for the current tab selected
      */
@@ -116,6 +140,22 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
             }
             return null;
         }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
 
