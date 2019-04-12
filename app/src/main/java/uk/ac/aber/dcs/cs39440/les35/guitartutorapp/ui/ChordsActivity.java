@@ -16,7 +16,7 @@ import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.SpinnerAdapter;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.FileReader;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordsViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
@@ -65,7 +65,7 @@ public class ChordsActivity extends AppCompatActivity {
         chordSpinner = findViewById(R.id.chordSpinner);
 
         try {
-            FileReader reader = new FileReader(this);
+            CsvReader reader = new CsvReader(this);
             reader.readChords();
             chords = reader.getChords();
         } catch (IOException e) {

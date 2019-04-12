@@ -80,7 +80,7 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                FileReader reader = new FileReader(MyApplication.getAppContext());
+                CsvReader reader = new CsvReader(MyApplication.getAppContext());
 
                 reader.readNotes();
                 Note[] notes = reader.getNotes();

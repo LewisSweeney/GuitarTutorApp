@@ -2,12 +2,15 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,10 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
-public class FileReader {
+public class CsvReader {
     AssetManager am;
     InputStream is;
     String filename;
@@ -28,8 +32,10 @@ public class FileReader {
     Note[] notes;
     List<Tuning> tunings = new ArrayList<>();
     Chord[] chords;
+    List<String> badgeStrings = new ArrayList<>();
+    int[][] stats = new int[2][2];
 
-    public FileReader(Context context) throws IOException {
+    public CsvReader(Context context) throws IOException {
         am = context.getAssets();
         this.context = context;
         notes = new Note[108];
@@ -133,7 +139,7 @@ public class FileReader {
         }
 
         chords = new Chord[numChords];
-        for(int i = 0; i < numChords; i++){
+        for (int i = 0; i < numChords; i++) {
             chords[i] = tempChords.get(i);
         }
 
@@ -143,7 +149,91 @@ public class FileReader {
         filename = context.getResources().getString(R.string.badges_file_name);
         is = am.open(filename);
         reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-        
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                badgeStrings.add(line);
+            }
+        } catch (IOException exception) {
+            Log.e("CSV Reader", "Error " + line, exception);
+            exception.printStackTrace();
+        }
+    }
+
+    public void readStats() throws IOException {
+        filename = context.getResources().getString(R.string.stats_file_name);
+        is = am.open(filename);
+        reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                String[] lineSplit = line.split(",");
+                if(lineSplit[0].equals("rep")){
+                    stats[0][0] = Integer.parseInt(lineSplit[1]);
+                    stats[0][1] = Integer.parseInt(lineSplit[2]);
+                }
+                if(lineSplit[0].equals("rec")){
+                    stats[1][0] = Integer.parseInt(lineSplit[1]);
+                    stats[1][1] = Integer.parseInt(lineSplit[2]);
+                }
+            }
+        } catch (IOException exception) {
+            Log.e("CSV Reader", "Error " + line, exception);
+            exception.printStackTrace();
+        }
+    }
+
+    public void writeStats(StatType statType, int stat) throws IOException {
+        switch (statType) {
+            case RECTOT:
+                writeToFile("rec",stat,2);
+                break;
+            case REPTOT:
+                writeToFile("rep",stat,2);
+                break;
+            case RECSCORE:
+                writeToFile("rec",stat,1);
+                break;
+            case REPSCORE:
+                writeToFile("rep",stat,1);
+                break;
+        }
+    }
+
+    private void writeToFile(String type, int stat, int position) throws IOException {
+        String[] lines = new String[3];
+        filename = context.getResources().getString(R.string.stats_file_name);
+        is = am.open(filename);
+        reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+
+        int currentLine = 0;
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                lines[currentLine] = line;
+                String[] lineSplit = line.split(",");
+                if (lineSplit[0].equals(type)) {
+                    int currentStat = Integer.parseInt(lineSplit[position]);
+                    int newStat = currentStat + stat;
+                    lineSplit[position] = String.valueOf(newStat);
+                    StringBuilder sb = new StringBuilder();
+                    String newStatString = TextUtils.join(",", lineSplit);
+                    lines[currentLine] = newStatString;
+                }
+                currentLine++;
+            }
+        } catch (IOException exception) {
+            Log.e("CSV Reader", "Error " + line, exception);
+            exception.printStackTrace();
+        }
+
+        FileWriter fw = new FileWriter(filename);
+        PrintWriter writer = new PrintWriter(fw);
+        writer.write("");
+        for (String line : lines) {
+            System.out.println(line);
+            writer.println(line);
+        }
     }
 
     public Note[] getNotes() {
@@ -156,5 +246,13 @@ public class FileReader {
 
     public Chord[] getChords() {
         return chords;
+    }
+
+    public List<String> getBadges() {
+        return badgeStrings;
+    }
+
+    public int[][] getStats(){
+        return stats;
     }
 }

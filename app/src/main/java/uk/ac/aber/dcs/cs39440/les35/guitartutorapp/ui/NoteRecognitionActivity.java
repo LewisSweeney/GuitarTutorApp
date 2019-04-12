@@ -17,13 +17,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 
 public class NoteRecognitionActivity extends AppCompatActivity {
 
@@ -83,12 +86,14 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        buttons = new Button[4];
+
         buttons[0] = findViewById(R.id.button_option_one);
         buttons[1] = findViewById(R.id.button_option_two);
         buttons[2] = findViewById(R.id.button_option_three);
         buttons[3] = findViewById(R.id.button_option_four);
 
-        for (int i = 0; i < BUTTON_NUMBER; i++) {
+        for (int i = 0; i <= BUTTON_NUMBER; i++) {
             final Button tempButton = buttons[i];
             buttons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,6 +137,7 @@ public class NoteRecognitionActivity extends AppCompatActivity {
                 }
             }
         });
+        noteThread.start();
     }
 
     private void setButtons() {
@@ -197,8 +203,15 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     }
 
     private void nextQuestion() {
-        scoreDisplay.setText(score);
-        questionDisplay.setText(totalAnswered + "/" + NUMBER_OF_QUESTIONS);
+
+        scoreDisplay.setText(Integer.toString(score));
+        StringBuilder stringBuild = new StringBuilder();
+        stringBuild.append(totalAnswered);
+        stringBuild.append("/");
+        stringBuild.append(NUMBER_OF_QUESTIONS);
+
+
+        questionDisplay.setText(stringBuild);
         isPlaying = false;
         for (int i = 0; i < BUTTON_NUMBER; i++) {
             buttons[i].setClickable(false);
@@ -206,6 +219,8 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         resetArrayLists();
         setNotes();
         setButtons();
+        changePlayPauseButtonState();
+        System.out.println("CORRECT NOTE IS: " + currentCorrectNote.getNoteName());
         for (int i = 0; i < BUTTON_NUMBER; i++) {
             buttons[i].setClickable(true);
         }
@@ -214,11 +229,12 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     private void playNote() throws InterruptedException {
         if (isPlaying) {
             playSound(currentNoteFrequency, 44100);
-            Thread.sleep(1000);
         }
     }
 
     private void playSound(double frequency, int duration) {
+        System.out.println("PLAYING SOUND");
+
         // AudioTrack definition
         int mBufferSize = AudioTrack.getMinBufferSize(44100,
                 AudioFormat.CHANNEL_OUT_MONO,
@@ -245,17 +261,36 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     }
 
     private void endGame() {
+        scoreDisplay.setText(Integer.toString(score));
+        StringBuilder stringBuild = new StringBuilder();
+        stringBuild.append(totalAnswered);
+        stringBuild.append("/");
+        stringBuild.append(NUMBER_OF_QUESTIONS);
+
+        questionDisplay.setText(stringBuild);
+        isPlaying = false;
+        for (int i = 0; i < BUTTON_NUMBER; i++) {
+            buttons[i].setClickable(false);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Finished").setMessage("Final Score: " + score + "/" + NUMBER_OF_QUESTIONS).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        closeActivity();
-                    }
-                });
+            public void onClick(DialogInterface dialog, int id) {
+                try {
+                    closeActivity();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private void closeActivity(){
+    private void closeActivity() throws IOException {
+        CsvReader csvReader = new CsvReader(this);
+        csvReader.writeStats(StatType.RECSCORE, score);
+        csvReader.writeStats(StatType.RECTOT, 1);
         this.finish();
     }
 

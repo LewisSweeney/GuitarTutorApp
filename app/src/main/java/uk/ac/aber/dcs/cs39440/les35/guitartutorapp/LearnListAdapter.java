@@ -27,8 +27,8 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
 
 
     /**
-     * Sub-class WordViewHolder extends on RecyclerView.VIewHolder
-     * Contains the TextView views for displaying the text from each Word object
+     * Sub-class LearnViewHolder extends on RecyclerView.VIewHolder
+     * Contains the TextView views for displaying the text from each Learn object
      */
     class LearnViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         private final TextView learnOptionView;
@@ -48,7 +48,7 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
     }
 
     /**
-     * Constructor for the WordListAdapter
+     * Constructor for the LearnListAdapter
      *
      * @param context
      */
@@ -59,7 +59,7 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
 
 
     /**
-     * Method to create a new WordViewHolder
+     * Method to create a new LearnViewHolder
      * Required for extending RecyclerView.Adapter
      *
      * @param parent
