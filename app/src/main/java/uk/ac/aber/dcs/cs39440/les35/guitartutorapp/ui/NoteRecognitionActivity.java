@@ -1,10 +1,15 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -22,10 +27,12 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 
 public class NoteRecognitionActivity extends AppCompatActivity {
 
-    Button buttonOptionOne;
-    Button buttonOptionTwo;
-    Button buttonOptionThree;
-    Button buttonOptionFour;
+    final int BUTTON_NUMBER = 3;
+    final int NUMBER_OF_QUESTIONS = 5;
+
+    Thread noteThread;
+
+    Button[] buttons;
     Button correctAnswerButton;
 
     boolean isPlaying = false;
@@ -48,10 +55,13 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     Note currentCorrectNote;
     Note[] incorrectNotes;
 
+    // List for Note IDs, shuffled for unique random IDs
     List<Integer> idList;
+    // List for button IDs, shuffled for unique random IDs
     List<Integer> buttonIdList;
 
     TextView scoreDisplay;
+    TextView questionDisplay;
 
     int score = 0;
     int totalAnswered = 0;
@@ -73,10 +83,20 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        buttonOptionOne = findViewById(R.id.button_option_one);
-        buttonOptionTwo = findViewById(R.id.button_option_two);
-        buttonOptionThree = findViewById(R.id.button_option_three);
-        buttonOptionFour = findViewById(R.id.button_option_four);
+        buttons[0] = findViewById(R.id.button_option_one);
+        buttons[1] = findViewById(R.id.button_option_two);
+        buttons[2] = findViewById(R.id.button_option_three);
+        buttons[3] = findViewById(R.id.button_option_four);
+
+        for (int i = 0; i < BUTTON_NUMBER; i++) {
+            final Button tempButton = buttons[i];
+            buttons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buttonClicked(tempButton);
+                }
+            });
+        }
 
         playPauseButton = findViewById(R.id.play_pause_button);
         playPauseButton.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +107,7 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         });
 
         scoreDisplay = findViewById(R.id.score);
+        questionDisplay = findViewById(R.id.total);
 
         playButton = getDrawable(R.drawable.ic_play_circle_outline_black_24dp);
         pauseButton = getResources().getDrawable(R.drawable.ic_pause_circle_outline_black_24dp);
@@ -97,35 +118,29 @@ public class NoteRecognitionActivity extends AppCompatActivity {
             buttonIdList.add(i);
         }
 
-        resetArrayLists();
-        setNotes();
-        setButtons();
+        nextQuestion();
+
+        noteThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        playNote();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private void setButtons() {
-
-    }
-
-    private Button getButtonForAnswer(int id){
-        Button tempButton;
-        switch (id) {
-            case 0:
-                tempButton = buttonOptionOne;
-                break;
-            case 1:
-                tempButton =  buttonOptionTwo;
-                break;
-            case 2:
-                tempButton =  buttonOptionThree;
-                break;
-            case 3:
-                tempButton =  buttonOptionFour;
-                break;
-            default:
-                tempButton =  buttonOptionOne;
-                break;
-        }
-        return tempButton;
+        int correctButtonID = buttonIdList.get(0);
+        correctAnswerButton = buttons[correctButtonID];
+        buttons[correctButtonID].setText(currentCorrectNote.getNoteName());
+        buttons[buttonIdList.get(1)].setText(incorrectNotes[0].getNoteName());
+        buttons[buttonIdList.get(2)].setText(incorrectNotes[1].getNoteName());
+        buttons[buttonIdList.get(3)].setText(incorrectNotes[2].getNoteName());
     }
 
     /**
@@ -136,6 +151,8 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         incorrectNotes[0] = notesView.getNoteById(idList.get(1));
         incorrectNotes[1] = notesView.getNoteById(idList.get(2));
         incorrectNotes[2] = notesView.getNoteById(idList.get(3));
+
+        currentNoteFrequency = currentCorrectNote.getFrequency();
     }
 
     /**
@@ -165,4 +182,81 @@ public class NoteRecognitionActivity extends AppCompatActivity {
 
         System.out.println(isPlaying);
     }
+
+    private void buttonClicked(Button clickedButton) {
+        totalAnswered++;
+        if (clickedButton.equals(correctAnswerButton)) {
+            score++;
+        }
+
+        if (totalAnswered >= NUMBER_OF_QUESTIONS) {
+            endGame();
+        } else {
+            nextQuestion();
+        }
+    }
+
+    private void nextQuestion() {
+        scoreDisplay.setText(score);
+        questionDisplay.setText(totalAnswered + "/" + NUMBER_OF_QUESTIONS);
+        isPlaying = false;
+        for (int i = 0; i < BUTTON_NUMBER; i++) {
+            buttons[i].setClickable(false);
+        }
+        resetArrayLists();
+        setNotes();
+        setButtons();
+        for (int i = 0; i < BUTTON_NUMBER; i++) {
+            buttons[i].setClickable(true);
+        }
+    }
+
+    private void playNote() throws InterruptedException {
+        if (isPlaying) {
+            playSound(currentNoteFrequency, 44100);
+            Thread.sleep(1000);
+        }
+    }
+
+    private void playSound(double frequency, int duration) {
+        // AudioTrack definition
+        int mBufferSize = AudioTrack.getMinBufferSize(44100,
+                AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_8BIT);
+
+        AudioTrack mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100,
+                AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
+                mBufferSize, AudioTrack.MODE_STREAM);
+
+        // Sine wave
+        double[] mSound = new double[duration];
+        short[] mBuffer = new short[duration];
+        for (int i = 0; i < mSound.length; i++) {
+            mSound[i] = Math.sin((2.0 * Math.PI * i / (44100 / frequency)));
+            mBuffer[i] = (short) (mSound[i] * Short.MAX_VALUE);
+        }
+
+        mAudioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
+        mAudioTrack.play();
+
+        mAudioTrack.write(mBuffer, 0, mSound.length);
+        mAudioTrack.stop();
+        mAudioTrack.release();
+    }
+
+    private void endGame() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Finished").setMessage("Final Score: " + score + "/" + NUMBER_OF_QUESTIONS).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        closeActivity();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void closeActivity(){
+        this.finish();
+    }
+
 }

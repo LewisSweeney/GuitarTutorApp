@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
-import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordDAO;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesDAO;
@@ -81,7 +80,7 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                CsvReader reader = new CsvReader(MyApplication.getAppContext());
+                FileReader reader = new FileReader(MyApplication.getAppContext());
 
                 reader.readNotes();
                 Note[] notes = reader.getNotes();

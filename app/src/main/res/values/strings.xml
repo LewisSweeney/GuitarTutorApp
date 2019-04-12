@@ -6,6 +6,7 @@
     <string name="notes_file_name">csv/notes.csv</string>
     <string name="tuning_file_name">csv/tunings.csv</string>
     <string name="chords_file_name">csv/chords.csv</string>
+    <string name="badges_file_name">csv/badges.csv</string>
 
     <string name="tightenText">Tighten this string!</string>
     <string name="inTuneText">In Tune!</string>
@@ -170,5 +171,9 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="badge_tab">Badges</string>
+    <string name="score_title">Score</string>
+    <string name="total_title">Question</string>
+
 
 </resources>

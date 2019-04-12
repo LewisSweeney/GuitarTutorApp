@@ -18,9 +18,7 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
-import static java.lang.Short.valueOf;
-
-public class CsvReader {
+public class FileReader {
     AssetManager am;
     InputStream is;
     String filename;
@@ -31,7 +29,7 @@ public class CsvReader {
     List<Tuning> tunings = new ArrayList<>();
     Chord[] chords;
 
-    public CsvReader(Context context) throws IOException {
+    public FileReader(Context context) throws IOException {
         am = context.getAssets();
         this.context = context;
         notes = new Note[108];
@@ -139,6 +137,13 @@ public class CsvReader {
             chords[i] = tempChords.get(i);
         }
 
+    }
+
+    public void readBadges() throws IOException {
+        filename = context.getResources().getString(R.string.badges_file_name);
+        is = am.open(filename);
+        reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        
     }
 
     public Note[] getNotes() {
