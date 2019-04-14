@@ -171,10 +171,15 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="badge_tab">Badges</string>
+    <string name="badge_tab">Achievements</string>
     <string name="score_title">Score</string>
     <string name="total_title">Question</string>
     <string name="stats_file_name">csv/stats.csv</string>
+
+    <string name="rec_score_key">rec_score</string>
+    <string name="rep_score_key">rep_score</string>
+    <string name="rec_total_key">rec_total</string>
+    <string name="rep_total_key">rep_total</string>
 
 
 </resources>

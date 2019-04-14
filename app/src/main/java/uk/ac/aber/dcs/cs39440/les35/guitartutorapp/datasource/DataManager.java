@@ -1,16 +1,14 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,11 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
-public class CsvReader {
+public class DataManager {
+
+    SharedPreferences prefs;
+    SharedPreferences.Editor prefEditor;
+
     AssetManager am;
     InputStream is;
     String filename;
@@ -35,10 +37,18 @@ public class CsvReader {
     List<String> badgeStrings = new ArrayList<>();
     int[][] stats = new int[2][2];
 
-    public CsvReader(Context context) throws IOException {
+    final String REP_SCORE_KEY = "repscore";
+    final String REP_TOTAL_KEY = "reptotal";
+    final String REC_SCORE_KEY = "recscore";
+    final String REC_TOTAL_KEY = "rectotal";
+
+    public DataManager(Context context) throws IOException {
         am = context.getAssets();
         this.context = context;
         notes = new Note[108];
+
+        prefs = context.getSharedPreferences(REC_SCORE_KEY, Context.MODE_PRIVATE);
+
     }
 
     public void readNotes() throws IOException {
@@ -161,79 +171,52 @@ public class CsvReader {
     }
 
     public void readStats() throws IOException {
-        filename = context.getResources().getString(R.string.stats_file_name);
-        is = am.open(filename);
-        reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 
-        try {
-            while ((line = reader.readLine()) != null) {
-                String[] lineSplit = line.split(",");
-                if(lineSplit[0].equals("rep")){
-                    stats[0][0] = Integer.parseInt(lineSplit[1]);
-                    stats[0][1] = Integer.parseInt(lineSplit[2]);
-                }
-                if(lineSplit[0].equals("rec")){
-                    stats[1][0] = Integer.parseInt(lineSplit[1]);
-                    stats[1][1] = Integer.parseInt(lineSplit[2]);
-                }
-            }
-        } catch (IOException exception) {
-            Log.e("CSV Reader", "Error " + line, exception);
-            exception.printStackTrace();
-        }
+        int defaultValue = context.getResources().getInteger(R.integer.saved_stats_default_key);
+        stats[0][0] = prefs.getInt(REP_SCORE_KEY, defaultValue);
+        stats[0][1] = prefs.getInt(REP_TOTAL_KEY, defaultValue);
+        stats[1][0] = prefs.getInt(REC_SCORE_KEY, defaultValue);
+        stats[1][1] = prefs.getInt(REC_TOTAL_KEY, defaultValue);
+
     }
 
     public void writeStats(StatType statType, int stat) throws IOException {
+        int defaultValue = context.getResources().getInteger(R.integer.saved_stats_default_key);
+        prefEditor = prefs.edit();
+        String key;
+        int currentScore;
+        int newScore;
         switch (statType) {
             case RECTOT:
-                writeToFile("rec",stat,2);
+                key = REC_TOTAL_KEY;
+                currentScore = prefs.getInt(key, defaultValue);
+                newScore = currentScore + stat;
+                writeStatsToPrefs(key, newScore);
                 break;
             case REPTOT:
-                writeToFile("rep",stat,2);
+                key = REP_TOTAL_KEY;
+                currentScore = prefs.getInt(key, defaultValue);
+                newScore = currentScore + stat;
+                writeStatsToPrefs(key, newScore);
                 break;
             case RECSCORE:
-                writeToFile("rec",stat,1);
+                key = REC_SCORE_KEY;
+                currentScore = prefs.getInt(key, defaultValue);
+                newScore = currentScore + stat;
+                writeStatsToPrefs(key, newScore);
                 break;
             case REPSCORE:
-                writeToFile("rep",stat,1);
+                key = REP_SCORE_KEY;
+                currentScore = prefs.getInt(key, defaultValue);
+                newScore = currentScore + stat;
+                writeStatsToPrefs(key, newScore);
                 break;
         }
     }
 
-    private void writeToFile(String type, int stat, int position) throws IOException {
-        String[] lines = new String[3];
-        filename = context.getResources().getString(R.string.stats_file_name);
-        is = am.open(filename);
-        reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-
-        int currentLine = 0;
-
-        try {
-            while ((line = reader.readLine()) != null) {
-                lines[currentLine] = line;
-                String[] lineSplit = line.split(",");
-                if (lineSplit[0].equals(type)) {
-                    int currentStat = Integer.parseInt(lineSplit[position]);
-                    int newStat = currentStat + stat;
-                    lineSplit[position] = String.valueOf(newStat);
-                    StringBuilder sb = new StringBuilder();
-                    String newStatString = TextUtils.join(",", lineSplit);
-                    lines[currentLine] = newStatString;
-                }
-                currentLine++;
-            }
-        } catch (IOException exception) {
-            Log.e("CSV Reader", "Error " + line, exception);
-            exception.printStackTrace();
-        }
-
-        FileWriter fw = new FileWriter(filename);
-        PrintWriter writer = new PrintWriter(fw);
-        writer.write("");
-        for (String line : lines) {
-            System.out.println(line);
-            writer.println(line);
-        }
+    private void writeStatsToPrefs(String key, int stat) throws IOException {
+        prefEditor.putInt(key, stat);
+        prefEditor.apply();
     }
 
     public Note[] getNotes() {
@@ -252,7 +235,7 @@ public class CsvReader {
         return badgeStrings;
     }
 
-    public int[][] getStats(){
+    public int[][] getStats() {
         return stats;
     }
 }

@@ -38,7 +38,7 @@ import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.SpinnerAdapter;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
@@ -349,7 +349,7 @@ public class TuningFragment extends Fragment {
         oldColor = tuningNoteNames[0].getTextColors();
 
         try {
-            CsvReader reader = new CsvReader(this.getActivity().getApplicationContext());
+            DataManager reader = new DataManager(this.getActivity().getApplicationContext());
             reader.readTunings(notesView.getAllNotesAsList());
             tunings = reader.getTunings();
             reader.readChords();

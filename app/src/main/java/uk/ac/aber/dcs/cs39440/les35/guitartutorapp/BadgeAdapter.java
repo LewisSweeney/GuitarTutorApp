@@ -7,18 +7,18 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.List;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Badge;
 
 public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder> {
 
-    List<Badge> badgeItemList;
+    private List<Badge> badgeItemList;
     Context context;
 
 
@@ -29,13 +29,15 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
     class BadgeViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         private final TextView badgeTitleView;
         private final TextView badgeDescriptionView;
-        private final ImageView badgeImageView;
+        private final RatingBar badgeCompleteView;
+        private final TextView badgeProgressView;
 
         BadgeViewHolder(@NonNull View itemView) {
             super(itemView);
             badgeTitleView = itemView.findViewById(R.id.badge_item);
             badgeDescriptionView = itemView.findViewById(R.id.badge_description);
-            badgeImageView = itemView.findViewById(R.id.badge_graphic);
+            badgeCompleteView = itemView.findViewById(R.id.badge_graphic);
+            badgeProgressView = itemView.findViewById(R.id.progress);
             itemView.setOnCreateContextMenuListener(this);
         }
 
@@ -67,19 +69,17 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
     @NonNull
     @Override
     public BadgeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.badge_item, parent, false);
         return new BadgeViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BadgeViewHolder holder, final int position) {
-        int[] repStats;
-        int[] recStats;
-        int[][] stats;
+        int[][] stats = new int[2][2];
         try {
-            CsvReader csvReader = new CsvReader(context);
-            csvReader.readStats();
-            stats = csvReader.getStats();
+            DataManager dataManager = new DataManager(context);
+            dataManager.readStats();
+            stats = dataManager.getStats();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,12 +88,44 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
             Badge current = badgeItemList.get(position);
             holder.badgeTitleView.setText(current.getName());
             holder.badgeDescriptionView.setText(current.getDescription());
+
             switch(current.getType()){
                 case REPSCORE:
-
+                    if(stats[0][0] >= current.getAchievementLimit()){
+                        holder.badgeCompleteView.setRating(1);
+                    }
+                    else{
+                        holder.badgeCompleteView.setRating(0);
+                    }
+                    holder.badgeProgressView.setText(stats[0][0] + "/" + String.valueOf(current.getAchievementLimit()));
+                    break;
                 case RECSCORE:
+                    if(stats[1][0] >= current.getAchievementLimit()){
+                        holder.badgeCompleteView.setRating(1);
+                    }
+                    else{
+                        holder.badgeCompleteView.setRating(0);
+                    }
+                    holder.badgeProgressView.setText(String.valueOf(stats[1][0]) + "/" + String.valueOf(current.getAchievementLimit()));
+                    break;
                 case REPTOT:
+                    if(stats[0][1] >= current.getAchievementLimit()){
+                        holder.badgeCompleteView.setRating(1);
+                    }
+                    else{
+                        holder.badgeCompleteView.setRating(0);
+                    }
+                    holder.badgeProgressView.setText(String.valueOf(stats[0][1]) + "/" + String.valueOf(current.getAchievementLimit()));
+                    break;
                 case RECTOT:
+                    if(stats[1][1] >= current.getAchievementLimit()){
+                        holder.badgeCompleteView.setRating(1);
+                    }
+                    else{
+                        holder.badgeCompleteView.setRating(0);
+                    }
+                    holder.badgeProgressView.setText(String.valueOf(stats[1][1]) + "/" + String.valueOf(current.getAchievementLimit()));
+                    break;
             }
 
             int itemPosition = position;

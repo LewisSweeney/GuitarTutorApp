@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
@@ -288,9 +288,9 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     }
 
     private void closeActivity() throws IOException {
-        CsvReader csvReader = new CsvReader(this);
-        csvReader.writeStats(StatType.RECSCORE, score);
-        csvReader.writeStats(StatType.RECTOT, 1);
+        DataManager dataManager = new DataManager(this);
+        dataManager.writeStats(StatType.RECSCORE, score);
+        dataManager.writeStats(StatType.RECTOT, 1);
         this.finish();
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.BadgeAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.CsvReader;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Badge;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 
@@ -40,29 +40,36 @@ public class BadgesFragment extends Fragment {
         List<Badge> badges = new ArrayList<>();
 
         try {
-            CsvReader csvReader = new CsvReader(this.getActivity());
-            csvReader.readBadges();
-            badgeStringItems.addAll(csvReader.getBadges());
+            DataManager dataManager = new DataManager(this.getActivity());
+            dataManager.readBadges();
+            badgeStringItems.addAll(dataManager.getBadges());
             for(String badgeString : badgeStringItems){
                 String[] stringSplit = badgeString.split(",");
                 StatType type = StatType.RECSCORE;
                 if(stringSplit[0].equals("rep")){
                     if(stringSplit[3].equals("g")){
                         type = StatType.REPTOT;
+
+                        System.out.println("CREATED REPTOT BADGE " + stringSplit[1]);
                     }
-                    if(stringSplit[3].equals("S")){
+                    if(stringSplit[3].equals("s")){
                         type = StatType.REPSCORE;
+                        System.out.println("CREATED REPSCORE BADGE" + stringSplit[1]);
                     }
                 }
-                if(stringSplit[0].equals("reC")){
+                if(stringSplit[0].equals("rec")){
                     if(stringSplit[3].equals("g")){
                         type = StatType.RECTOT;
+                        System.out.println("CREATED RECTOT BADGE" + stringSplit[1]);
                     }
-                    if(stringSplit[3].equals("S")){
+                    if(stringSplit[3].equals("s")){
                         type = StatType.RECSCORE;
+                        System.out.println("CREATED RECSCORE BADGE" + stringSplit[1]);
                     }
                 }
-                Badge badge = new Badge(stringSplit[1], stringSplit[2],Integer.parseInt(stringSplit[4]), type);
+                String stringScore = stringSplit[4];
+                int score = Integer.parseInt(stringScore);
+                Badge badge = new Badge(String.valueOf(stringSplit[1]), String.valueOf(stringSplit[2]),score, type);
                 badges.add(badge);
             }
         } catch (IOException e) {
@@ -90,5 +97,11 @@ public class BadgesFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 }
