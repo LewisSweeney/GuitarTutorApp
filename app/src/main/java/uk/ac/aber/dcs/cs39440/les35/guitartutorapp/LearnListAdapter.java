@@ -16,6 +16,7 @@ import java.util.List;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.ChordsActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.MetronomeActivity;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.NotePlaybackActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.NoteRecognitionActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TabActivity;
 
@@ -123,22 +124,16 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
                     isClickable = false;
                     break;
                 case 2:
-                    //intent = new Intent(context, ScalesActivity.class);
-                    // context.startActivity(intent);
-                    // isClickable = false;
-                    toast.show();
+                    intent = new Intent(context, NotePlaybackActivity.class);
+                    context.startActivity(intent);
+                    isClickable = false;
                     break;
                 case 3:
-                    //intent = new Intent(context, NotePlaybackActivity.class);
-                    //context.startActivity(intent);
-                    // isClickable = false;
-                    break;
-                case 4:
                     intent = new Intent(context, NoteRecognitionActivity.class);
                     context.startActivity(intent);
                     isClickable = false;
                     break;
-                case 5:
+                case 4:
                     intent = new Intent(context, MetronomeActivity.class);
                     context.startActivity(intent);
                     isClickable = false;

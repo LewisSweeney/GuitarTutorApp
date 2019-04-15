@@ -1,5 +1,6 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui;
 
+import android.content.Intent;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -43,18 +44,21 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
+
+        // Change ID depending on the activity
+        navigationView.getMenu().getItem(0).setChecked(true);
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
+                        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+                            navigationView.getMenu().getItem(i).setChecked(false);
+                        }
                         menuItem.setChecked(true);
-                        // close drawer when item is tapped
                         drawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
+                        onNavMenuPressed(menuItem);
 
                         return true;
                     }
@@ -163,6 +167,24 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
 
     }
 
+    private void onNavMenuPressed(MenuItem menuItem) {
+        Intent intent;
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_about:
+                intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+    }
 
 }
 

@@ -33,6 +33,8 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     final int BUTTON_NUMBER = 3;
     final int NUMBER_OF_QUESTIONS = 5;
 
+    private AlertDialog alert;
+
     Thread noteThread;
 
     Button[] buttons;
@@ -293,5 +295,33 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         dataManager.writeStats(StatType.RECTOT, 1);
         this.finish();
     }
+
+    @Override
+    public void onBackPressed(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.leave_game_activity));
+        // Cancels the word entry if the user clicks this AlertDialog option
+        // Replies intent that result of this activity is Canceled
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+                finish();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+
+    }
+
+
 
 }

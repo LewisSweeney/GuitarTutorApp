@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tabs;
 
 import android.content.Context;
 import android.net.Uri;

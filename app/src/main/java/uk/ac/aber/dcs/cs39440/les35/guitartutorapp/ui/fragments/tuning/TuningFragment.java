@@ -539,6 +539,11 @@ public class TuningFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        if(audioThread.isAlive()){
+            audioThread.interrupt();
+            dispatcher.stop();
+        }
+
     }
 
     @Override

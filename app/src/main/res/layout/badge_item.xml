@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/colorWhite">
 
 
     <RelativeLayout
@@ -52,6 +53,7 @@
                 android:layout_height="20dp"
                 android:numStars="1"
                 android:rating="1"
+                android:isIndicator="true"
                 app:layout_constraintLeft_toLeftOf="@id/progress"
                 app:layout_constraintRight_toRightOf="@id/progress"
                 android:layout_centerInParent="true"

@@ -34,8 +34,7 @@
 
     <string-array name="learning_options_array">
         <item>Chords</item>
-        <item>Guitar Tabs</item>
-        <item>Scales</item>
+        <item>Scales/Tabs</item>
         <item>Note Playback</item>
         <item>Note Recognition</item>
         <item>Metronome</item>
@@ -43,8 +42,7 @@
 
     <string-array name="learning_descriptions_array">
         <item>See chord diagrams</item>
-        <item>Learn how to read and play guitar tablature</item>
-        <item>Learn various scales on your guitar</item>
+        <item>Learn to read guitar tabs and play guitar scales</item>
         <item>Play requested notes to test your knowledge of the fretboard</item>
         <item>Test your note recognition skills with this little game</item>
         <item>Use a metronome to practice playing to the rhythm</item>
@@ -72,7 +70,7 @@
     <string name="chord_root_spinner_title">Root Note</string>
     <string name="chord_spinner_title">Chord</string>
     <string name="start_fret_label">Fret:</string>
-    <string name="tab_spinner_title">Tab Name</string>
+    <string name="tab_spinner_title">Scale</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -180,6 +178,17 @@
     <string name="rep_score_key">rep_score</string>
     <string name="rec_total_key">rec_total</string>
     <string name="rep_total_key">rep_total</string>
+    <string name="scale_spinner_title">Scale</string>
+    <string name="playback_note_prompt">Please play the following note:</string>
+    <string name="button_next">Next Question</string>
+    <string name="home">Home</string>
+    <string name="about_app_title">About This App</string>
+    <string name="about_app_body">This app was created as part of my final year project in Aberystwyth University. This app aims to help people to learn to play guitar, with tools to help improve the skills of any level guitarist. The app uses mostly original code, but there are some attributions I would like to make.</string>
+    <string name="about_attribution_title">Attributions</string>
+    <string name="attribution_body">TarsosDSP (pitch detection):\nhttps://github.com/JorenSix/TarsosDSP\n\nGuitarChordView (displays guitar chords):\nhttps://github.com/Airsaid/ChordView\n\nList of chords found here:\nhttps://github.com/ap1/chordPractice/blob/master/chords2.csv\n\nApp Icon adapted from icon by itim2101 on:\nhttps://www.flaticon.com/\n\nApache License, Version 2.0:\nhttps://www.apache.org/licenses/LICENSE-2.0
+
+    </string>
+    <string name="leave_game_activity">Are you sure you want to leave this screen? Any points you have scored will be lost.</string>
 
 
 </resources>

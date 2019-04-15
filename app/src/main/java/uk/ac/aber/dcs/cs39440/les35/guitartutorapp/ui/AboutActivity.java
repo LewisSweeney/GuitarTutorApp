@@ -11,14 +11,14 @@ import android.view.MenuItem;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
-public class SettingsActivity extends AppCompatActivity {
+public class AboutActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_about);
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -33,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
         final NavigationView navigationView = findViewById(R.id.nav_view);
 
         // Change ID depending on the activity
-        navigationView.getMenu().getItem(1).setChecked(true);
+        navigationView.getMenu().getItem(2).setChecked(true);
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {

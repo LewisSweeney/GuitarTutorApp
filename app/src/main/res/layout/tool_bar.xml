@@ -9,6 +9,5 @@
     app:itemIconTint="@color/colorWhite"
     app:titleTextColor="@color/colorWhite"
     app:elevation="0dp"
-    app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="@style/PopupTheme"
     />

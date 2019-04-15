@@ -12,25 +12,22 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
-
 public class TabReader {
-    AssetManager am;
+    private AssetManager am;
     InputStream is;
-    String filename;
-    BufferedReader reader;
-    String line = "";
-    Context context;
-    String[] files;
+    private String filename;
+    private BufferedReader reader;
+    private String line = "";
+    private Context context;
+    private String[] files;
     List<String> tabNames;
-    List<Integer> tabNoteIds = new ArrayList<>();
-    int[] openNoteIds = new int[6];
-    List<String> tabFileNames = new ArrayList<>();
+    private List<Integer> tabNoteIds = new ArrayList<>();
+    private int[] openNoteIds = new int[6];
+    private List<String> tabFileNames = new ArrayList<>();
 
 
     public TabReader(Context context, int[] openNoteIds) throws IOException {
-        files = context.getAssets().list("tabs");
+        files = context.getAssets().list("scales");
         am = context.getAssets();
         this.context = context;
         this.openNoteIds = openNoteIds;
@@ -39,7 +36,7 @@ public class TabReader {
     public String[] getTabNames() throws IOException {
         List<String> tabNames = new ArrayList<>();
         for (String file : files) {
-            filename = "tabs/" + file;
+            filename = "scales/" + file;
             tabFileNames.add(filename);
             is = am.open(filename);
             reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -54,12 +51,12 @@ public class TabReader {
             }
         }
 
-        return tabNames.toArray(new String[tabNames.size()]);
+        return tabNames.toArray(new String[0]);
 
     }
 
     public List<String> getTab(int position) throws IOException {
-        String line = "";
+        String line;
         String[] tabStave;
 
         filename = tabFileNames.get(position);
@@ -96,7 +93,7 @@ public class TabReader {
         }
 
         for (String split : lineSplit) {
-            int guitarString = -1;
+            int guitarString;
             if (!split.equals("-")) {
                 String[] subSplit = split.split(":");
                 guitarString = Integer.parseInt(subSplit[0]);
