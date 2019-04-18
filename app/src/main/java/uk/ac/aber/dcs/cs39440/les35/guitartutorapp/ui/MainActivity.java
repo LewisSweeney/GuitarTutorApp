@@ -123,10 +123,8 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new TuningFragment();
-                case 1:
                     return new LearnFragment();
-                case 2:
+                case 1:
                     return new BadgesFragment();
             }
             return null;
@@ -134,18 +132,18 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getResources().getText(R.string.tuner_tab);
-                case 1:
                     return getResources().getText(R.string.learn_tab);
-                case 2:
+                case 1:
                     return getResources().getText(R.string.badge_tab);
+
+
             }
             return null;
         }
@@ -170,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
     private void onNavMenuPressed(MenuItem menuItem) {
         Intent intent;
         switch (menuItem.getItemId()) {
-            case R.id.nav_home:
+            case R.id.nav_learn:
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;

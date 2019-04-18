@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tuning;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,12 +12,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +32,12 @@ import java.util.List;
 import java.util.Objects;
 
 import be.tarsos.dsp.AudioDispatcher;
+import be.tarsos.dsp.AudioEvent;
+import be.tarsos.dsp.AudioProcessor;
+import be.tarsos.dsp.io.android.AudioDispatcherFactory;
+import be.tarsos.dsp.pitch.PitchDetectionHandler;
+import be.tarsos.dsp.pitch.PitchDetectionResult;
+import be.tarsos.dsp.pitch.PitchProcessor;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.SpinnerAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
@@ -39,10 +46,7 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
-/**
- *
- */
-public class TuningFragment extends Fragment {
+public class TuningActivity extends AppCompatActivity {
 
     // Static integers required as permission codes for requesting and checking permissions
     private static final int REQUEST_MICROPHONE = 1;
@@ -94,71 +98,55 @@ public class TuningFragment extends Fragment {
     Thread audioThread = new Thread();
 
     Boolean showStartTunerButton = true;
-
-    public TuningFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TuningFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TuningFragment newInstance(String param1, String param2) {
-        TuningFragment fragment = new TuningFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    DrawerLayout drawerLayout;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tuning);
 
+        // Adds the toolbar to the screen
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
 
         notesView = ViewModelProviders.of(this).get(NotesViewModel.class);
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_tuning, container, false);
 
         // Finds the views required for the tuner screen
-        noteText = view.getRootView().findViewById(R.id.noteText);
-        noteUp = view.getRootView().findViewById(R.id.note_up);
-        noteDown = view.getRootView().findViewById(R.id.note_down);
-        indicatorText = view.getRootView().findViewById(R.id.indicatorText);
-        instrumentSpinner = view.getRootView().findViewById(R.id.instrumentSpinner);
-        tuningSpinner = view.getRootView().findViewById(R.id.tuningSpinner);
-        needle = view.getRootView().findViewById(R.id.needle);
-        startTunerButton = view.getRootView().findViewById(R.id.startTuner);
+        noteText = findViewById(R.id.noteText);
+        noteUp = findViewById(R.id.note_up);
+        noteDown = findViewById(R.id.note_down);
+        indicatorText = findViewById(R.id.indicatorText);
+        instrumentSpinner = findViewById(R.id.instrumentSpinner);
+        tuningSpinner = findViewById(R.id.tuningSpinner);
+        needle = findViewById(R.id.needle);
+        startTunerButton = findViewById(R.id.startTuner);
         startTunerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onStartTunerButtonClick();
                 onStartTunerButtonClick();
             }
         });
         buttonStateChange(true);
 
         // Some setup methods to populate the spinners and read the tunings from the CSV file
-        readTunings(view);
+        readTunings();
         setupSpinners();
         checkPermissions();
-
-        return view;
     }
 
     public void startTuner() {
-/*
+
         // Creates a new TarsosDSP PitchDetectionHandler, which does the work of detecting what
         // the pitch of the sound it is currently detecting
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
             public void handlePitch(PitchDetectionResult res, AudioEvent e) {
                 final float pitchInHz = res.getPitch();
-                getActivity().runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -170,14 +158,14 @@ public class TuningFragment extends Fragment {
                 });
             }
         };
-        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
+        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(44100, 4096, 0);
 
         // Creates an AudioProcessor which is a TarsosDSP handler for most of its audio manipulation techniques
-        AudioProcessor pitchProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
+        AudioProcessor pitchProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 44100, 4096, pdh);
         dispatcher.addAudioProcessor(pitchProcessor);
         // Creates a new thread which runs the AudioProcessor, allowing the tuner to run indefinitely
         audioThread = new Thread(dispatcher, "AudioThread");
-        audioThread.start(); */
+        audioThread.start();
     }
 
     /**
@@ -259,7 +247,6 @@ public class TuningFragment extends Fragment {
 
 
     private void setGaugeRotation(float pitchInHz, Note currentClosestNote, float centDown, float centUp, Note previousNote, Note nextNote) {
-        dispatcher.stop();
         if (pitchInHz < currentClosestNote.getFrequency()) {
             float angle;
             for (int i = 1; i < 100; i++) {
@@ -337,20 +324,20 @@ public class TuningFragment extends Fragment {
     /**
      * Method called in the onCreate method to read tunings in from the CSV file into an ArrayList
      */
-    private void readTunings(View view) {
+    private void readTunings() {
         List<Note> tuningNotes = new ArrayList<>();
 
-        tuningNoteNames[0] = view.findViewById(R.id.tuningNoteOne);
-        tuningNoteNames[1] = view.findViewById(R.id.tuningNoteTwo);
-        tuningNoteNames[2] = view.findViewById(R.id.tuningNoteThree);
-        tuningNoteNames[3] = view.findViewById(R.id.tuningNoteFour);
-        tuningNoteNames[4] = view.findViewById(R.id.tuningNoteFive);
-        tuningNoteNames[5] = view.findViewById(R.id.tuningNoteSix);
+        tuningNoteNames[0] = findViewById(R.id.tuningNoteOne);
+        tuningNoteNames[1] = findViewById(R.id.tuningNoteTwo);
+        tuningNoteNames[2] = findViewById(R.id.tuningNoteThree);
+        tuningNoteNames[3] = findViewById(R.id.tuningNoteFour);
+        tuningNoteNames[4] = findViewById(R.id.tuningNoteFive);
+        tuningNoteNames[5] = findViewById(R.id.tuningNoteSix);
 
         oldColor = tuningNoteNames[0].getTextColors();
 
         try {
-            DataManager reader = new DataManager(this.getActivity().getApplicationContext());
+            DataManager reader = new DataManager(this.getApplicationContext());
             reader.readTunings(notesView.getAllNotesAsList());
             tunings = reader.getTunings();
             reader.readChords();
@@ -369,7 +356,7 @@ public class TuningFragment extends Fragment {
      * Initialises both the Instrument and Tuning spinners
      */
     private void setupSpinners() {
-        SpinnerAdapter instrumentAdapter = new SpinnerAdapter(this.getActivity().getApplicationContext(), getResources().getStringArray(R.array.instrument_spinner_array));
+        SpinnerAdapter instrumentAdapter = new SpinnerAdapter(this.getApplicationContext(), getResources().getStringArray(R.array.instrument_spinner_array));
         instrumentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         instrumentSpinner.setAdapter(instrumentAdapter);
         instrumentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -435,7 +422,7 @@ public class TuningFragment extends Fragment {
         }
 
 
-        SpinnerAdapter tuningSpinnerArrayAdapter = new SpinnerAdapter(this.getActivity().getApplicationContext(), tuningNamesAsArray);
+        SpinnerAdapter tuningSpinnerArrayAdapter = new SpinnerAdapter(this.getApplicationContext(), tuningNamesAsArray);
         tuningSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tuningSpinner.setAdapter(tuningSpinnerArrayAdapter);
 
@@ -455,7 +442,7 @@ public class TuningFragment extends Fragment {
         if (noteCorrectIndicator >= noteCorrectLimit) {
             noteCorrectIndicator = 0;
             System.out.println(noteCorrectIndicator);
-            AssetFileDescriptor afd = getActivity().getAssets().openFd(getString(R.string.sound_intune));
+            AssetFileDescriptor afd = getAssets().openFd(getString(R.string.sound_intune));
             MediaPlayer mPlayer = new MediaPlayer();
             mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             mPlayer.prepare();
@@ -476,16 +463,16 @@ public class TuningFragment extends Fragment {
         // allow this permission.
         // CURRENTLY app will not function without the microphone permsission, but there is the intent
         // to add a sound only tuner, allowing the user to match to a sound played on the device.
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.RECORD_AUDIO)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed; request the permission
-                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_MICROPHONE);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_MICROPHONE);
             }
         } else {
             startTuner();
@@ -504,7 +491,7 @@ public class TuningFragment extends Fragment {
     }
 
     private void onStartTunerButtonClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.permission_alert_title));
         builder.setMessage(getString(R.string.permission_alert_message));
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -518,7 +505,7 @@ public class TuningFragment extends Fragment {
         alert.show();
     }
 
-    private void stopDispatcher(){
+    private void stopDispatcher() {
         dispatcher.stop();
     }
 
@@ -526,10 +513,10 @@ public class TuningFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_MICROPHONE: {
-                if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(this.getActivity()).getApplicationContext(), Manifest.permission.RECORD_AUDIO)
+                if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(this).getApplicationContext(), Manifest.permission.RECORD_AUDIO)
                         != PackageManager.PERMISSION_GRANTED) {
 
-                    Toast toast = Toast.makeText(this.getActivity(), "Microphone Permission required for tuner", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(this, "Microphone Permission required for tuner", Toast.LENGTH_SHORT);
                     toast.show();
 
                 } else {
@@ -541,30 +528,20 @@ public class TuningFragment extends Fragment {
         }
     }
 
-    @Override
+        @Override
     public void onPause() {
         super.onPause();
-        audioThread.interrupt();
+        System.out.println("STOPPING TUNING");
         dispatcher.stop();
+
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        audioThread.interrupt();
+        System.out.println("STOPPING TUNING");
         dispatcher.stop();
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        checkPermissions();
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        checkPermissions();
-    }
-
 }

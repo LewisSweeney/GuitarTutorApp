@@ -33,6 +33,10 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     final int BUTTON_NUMBER = 3;
     final int NUMBER_OF_QUESTIONS = 5;
 
+    // The IDs for the notes that the first 12 frets on each string of the guitar can play
+    final int lowerBoundID = 28;
+    final int upperBoundID = 64;
+
     private AlertDialog alert;
 
     Thread noteThread;
@@ -49,9 +53,7 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     Drawable playButton;
     Drawable pauseButton;
 
-    // The IDs for the notes that the first 12 frets on each string of the guitar can play
-    int lowerBoundID = 28;
-    int upperBoundID = 64;
+
 
     ImageView playPauseButton;
 

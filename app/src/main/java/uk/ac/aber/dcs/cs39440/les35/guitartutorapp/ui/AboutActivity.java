@@ -54,7 +54,7 @@ public class AboutActivity extends AppCompatActivity {
     private void onNavMenuPressed(MenuItem menuItem) {
         Intent intent;
         switch (menuItem.getItemId()) {
-            case R.id.nav_home:
+            case R.id.nav_learn:
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;

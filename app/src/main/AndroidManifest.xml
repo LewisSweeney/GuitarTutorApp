@@ -37,8 +37,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.TabActivity"
-            android:label="@string/title_activity_tab"
+            android:label="@string/title_activity_tabs_scales"
             android:theme="@style/AppTheme" />
+        <activity android:name=".ui.TuningActivity"
+            android:label="@string/title_activity_tuning"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".ui.ScalesActivity" />
         <activity android:name=".ui.NotePlaybackActivity" />
         <activity android:name=".ui.NoteRecognitionActivity" />
@@ -46,7 +49,7 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".ui.AboutActivity"></activity>
+        <activity android:name=".ui.AboutActivity" />
     </application>
 
 </manifest>

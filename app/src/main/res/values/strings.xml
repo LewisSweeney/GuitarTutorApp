@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GuitarTutorApp</string>
+    <string name="app_name">String Along</string>
     <string name="instrument_spinner_title">Instrument</string>
     <string name="tuning_spinner_title">Tuning</string>
 
@@ -33,6 +33,7 @@
     </string-array>
 
     <string-array name="learning_options_array">
+        <item>Guitar Tuner</item>
         <item>Chords</item>
         <item>Scales/Tabs</item>
         <item>Note Playback</item>
@@ -41,6 +42,7 @@
     </string-array>
 
     <string-array name="learning_descriptions_array">
+        <item>Tune your guitar using your device\'s microphone</item>
         <item>See chord diagrams</item>
         <item>Learn to read guitar tabs and play guitar scales</item>
         <item>Play requested notes to test your knowledge of the fretboard</item>
@@ -189,6 +191,18 @@
 
     </string>
     <string name="leave_game_activity">Are you sure you want to leave this screen? Any points you have scored will be lost.</string>
+    <string name="start_tuner">Start Tuner</string>
+    <string name="permission_alert_title">Permission Required</string>
+    <string name="permission_alert_message">There are some features of this app that require permission to use your microphone. As you have denied this permission, you will need to grant the permission from the Settings on your device.</string>
+    <string name="correct_note_text">\u2713</string>
+    <string name="incorrect_note_text">X</string>
+    <string name="sound_incorrect">sounds/incorrect.wav</string>
+    <string name="final_score_title">Game Finished</string>
+    <string name="final_score_first">You scored:</string>
+    <string name="title_activity_tuning">Tuning</string>
+    <string name="title_activity_tabs_scales">Tabs and Scales</string>
+    <string name="tuner">Tuner</string>
+    <string name="learn">Learning Tools</string>
 
 
 </resources>

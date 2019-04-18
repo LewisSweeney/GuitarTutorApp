@@ -19,6 +19,7 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.MetronomeActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.NotePlaybackActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.NoteRecognitionActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TabActivity;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TuningActivity;
 
 public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.LearnViewHolder> {
 
@@ -114,26 +115,31 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
             Toast toast = Toast.makeText(context, "This feature is under development", Toast.LENGTH_SHORT);
             switch (position) {
                 case 0:
-                    intent = new Intent(context, ChordsActivity.class);
+                    intent = new Intent(context, TuningActivity.class);
                     context.startActivity(intent);
                     isClickable = false;
                     break;
                 case 1:
-                    intent = new Intent(context, TabActivity.class);
+                    intent = new Intent(context, ChordsActivity.class);
                     context.startActivity(intent);
                     isClickable = false;
                     break;
                 case 2:
-                    intent = new Intent(context, NotePlaybackActivity.class);
+                    intent = new Intent(context, TabActivity.class);
                     context.startActivity(intent);
                     isClickable = false;
                     break;
                 case 3:
-                    intent = new Intent(context, NoteRecognitionActivity.class);
+                    intent = new Intent(context, NotePlaybackActivity.class);
                     context.startActivity(intent);
                     isClickable = false;
                     break;
                 case 4:
+                    intent = new Intent(context, NoteRecognitionActivity.class);
+                    context.startActivity(intent);
+                    isClickable = false;
+                    break;
+                case 5:
                     intent = new Intent(context, MetronomeActivity.class);
                     context.startActivity(intent);
                     isClickable = false;
