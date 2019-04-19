@@ -1,8 +1,15 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -23,8 +30,13 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TuningActivity;
 
 public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.LearnViewHolder> {
 
+    // Static integers required as permission codes for requesting and checking permissions
+    private static final int REQUEST_MICROPHONE = 1;
+
+
     private List<LearnItem> learnItemList;
     private Context context;
+    private Activity activity;
     public boolean isClickable = true;
 
 
@@ -54,8 +66,9 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
      *
      * @param context
      */
-    public LearnListAdapter(Context context) {
+    public LearnListAdapter(Context context, Activity activity) {
         LayoutInflater inflater = LayoutInflater.from(context);
+        this.activity = activity;
         this.context = context;
     }
 
@@ -115,9 +128,14 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
             Toast toast = Toast.makeText(context, "This feature is under development", Toast.LENGTH_SHORT);
             switch (position) {
                 case 0:
-                    intent = new Intent(context, TuningActivity.class);
-                    context.startActivity(intent);
-                    isClickable = false;
+                    if(checkPermissions()){
+                        intent = new Intent(context, TuningActivity.class);
+                        context.startActivity(intent);
+                        isClickable = false;
+                    } else{
+                        showPermissionRequiredAlert();
+                    }
+
                     break;
                 case 1:
                     intent = new Intent(context, ChordsActivity.class);
@@ -130,9 +148,13 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
                     isClickable = false;
                     break;
                 case 3:
-                    intent = new Intent(context, NotePlaybackActivity.class);
-                    context.startActivity(intent);
-                    isClickable = false;
+                    if(checkPermissions()){
+                        intent = new Intent(context, NotePlaybackActivity.class);
+                        context.startActivity(intent);
+                        isClickable = false;
+                    } else{
+                        showPermissionRequiredAlert();
+                    }
                     break;
                 case 4:
                     intent = new Intent(context, NoteRecognitionActivity.class);
@@ -146,6 +168,43 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
                     break;
             }
         }
+    }
+
+    private boolean checkPermissions(){
+        // Checks if the RECORD_AUDIO permission is granted, and if it is not it prompts the user to
+        // allow this permission.
+        // CURRENTLY app will not function without the microphone permsission, but there is the intent
+        // to add a sound only tuner, allowing the user to match to a sound played on the device.
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_MICROPHONE);
+            }
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    private void showPermissionRequiredAlert(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.permission_alert_title));
+        builder.setMessage(context.getString(R.string.permission_alert_message));
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

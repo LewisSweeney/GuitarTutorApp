@@ -1,6 +1,8 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -8,9 +10,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -25,6 +29,9 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.LearnFragment;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tuning.TuningFragment;
 
 public class MainActivity extends AppCompatActivity implements LearnFragment.OnFragmentInteractionListener, TuningFragment.OnFragmentInteractionListener, BadgesFragment.OnFragmentInteractionListener {
+
+    // Static integers required as permission codes for requesting and checking permissions
+    private static final int REQUEST_MICROPHONE = 1;
 
     DrawerLayout drawerLayout;
 
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
+        checkPermissions();
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -183,6 +191,29 @@ public class MainActivity extends AppCompatActivity implements LearnFragment.OnF
 
         }
     }
+
+    private void checkPermissions() {
+        // Checks if the RECORD_AUDIO permission is granted, and if it is not it prompts the user to
+        // allow this permission.
+        // CURRENTLY app will not function without the microphone permsission, but there is the intent
+        // to add a sound only tuner, allowing the user to match to a sound played on the device.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_MICROPHONE);
+            }
+        } else {
+
+        }
+    }
+
+
 
 }
 

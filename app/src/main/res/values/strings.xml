@@ -15,7 +15,7 @@
     <string name="standard_tuning">Standard Tuning</string>
     <string name="sound_intune">sounds/correct.mp3</string>
     <string name="tuner_tab">Tuner</string>
-    <string name="learn_tab">Learn</string>
+    <string name="learn_tab">Tools</string>
 
     <string-array name="instrument_spinner_array">
         <item>Guitar</item>
@@ -193,16 +193,17 @@
     <string name="leave_game_activity">Are you sure you want to leave this screen? Any points you have scored will be lost.</string>
     <string name="start_tuner">Start Tuner</string>
     <string name="permission_alert_title">Permission Required</string>
-    <string name="permission_alert_message">There are some features of this app that require permission to use your microphone. As you have denied this permission, you will need to grant the permission from the Settings on your device.</string>
+    <string name="permission_alert_message">There are some features of this app that require permission to use your microphone. This permission is currently not granted, and will need to be granted from the Settings on your device.</string>
     <string name="correct_note_text">\u2713</string>
     <string name="incorrect_note_text">X</string>
     <string name="sound_incorrect">sounds/incorrect.wav</string>
     <string name="final_score_title">Game Finished</string>
     <string name="final_score_first">You scored:</string>
-    <string name="title_activity_tuning">Tuning</string>
+    <string name="title_activity_tuning">Tuner</string>
     <string name="title_activity_tabs_scales">Tabs and Scales</string>
     <string name="tuner">Tuner</string>
     <string name="learn">Learning Tools</string>
+    <string name="title_activity_about">About This App</string>
 
 
 </resources>

@@ -309,6 +309,7 @@ public class NoteRecognitionActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 dialog.dismiss();
+                isPlaying = false;
                 finish();
             }
         });

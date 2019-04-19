@@ -528,20 +528,44 @@ public class TuningActivity extends AppCompatActivity {
         }
     }
 
-        @Override
+    private void restartTuner() {
+        if(dispatcher != null){
+            checkPermissions();
+            indicatorText.setVisibility(View.VISIBLE);
+            startTunerButton.setVisibility(View.GONE);
+            startTunerButton.setClickable(false);
+        }
+        else{
+            onStartTunerButtonClick();
+        }
+
+    }
+
+    private void activityPaused() {
+        if (dispatcher != null) {
+            dispatcher.stop();
+            indicatorText.setVisibility(View.GONE);
+            startTunerButton.setVisibility(View.VISIBLE);
+            startTunerButton.setClickable(true);
+            startTunerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    restartTuner();
+                }
+            });
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
-        System.out.println("STOPPING TUNING");
-        dispatcher.stop();
-
+        activityPaused();
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        System.out.println("STOPPING TUNING");
-        dispatcher.stop();
-
+        activityPaused();
     }
 }

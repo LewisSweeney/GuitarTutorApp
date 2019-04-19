@@ -50,7 +50,7 @@ public class LearnFragment extends Fragment {
         listLearn.setMotionEventSplittingEnabled(false);
         listLearn.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
 
-        adapter = new LearnListAdapter(this.getActivity());
+        adapter = new LearnListAdapter(this.getActivity(), this.getActivity());
         adapter.setLearnItems(learnListItems);
 
         listLearn.setAdapter(adapter);
