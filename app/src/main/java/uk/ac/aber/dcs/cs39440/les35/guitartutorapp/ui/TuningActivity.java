@@ -39,7 +39,7 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.SpinnerAdapter;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters.SpinnerAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
@@ -503,10 +503,6 @@ public class TuningActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    private void stopDispatcher() {
-        dispatcher.stop();
     }
 
     @Override

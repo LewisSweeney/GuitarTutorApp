@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -316,11 +317,15 @@ public class NotePlaybackActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         dispatcher.stop();
+        Toast toast = Toast.makeText(this, getString(R.string.toast_game_quit), Toast.LENGTH_SHORT);
+        finish();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         dispatcher.stop();
+        Toast toast = Toast.makeText(this, getString(R.string.toast_game_quit), Toast.LENGTH_SHORT);
+        finish();
     }
 }

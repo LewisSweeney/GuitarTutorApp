@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.ChordsActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.MetronomeActivity;

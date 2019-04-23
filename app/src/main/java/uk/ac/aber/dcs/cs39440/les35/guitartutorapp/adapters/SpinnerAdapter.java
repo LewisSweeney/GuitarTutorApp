@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
 

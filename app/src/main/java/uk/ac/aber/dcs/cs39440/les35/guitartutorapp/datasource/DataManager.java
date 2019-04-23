@@ -214,7 +214,15 @@ public class DataManager {
         }
     }
 
+    public void clearStats() throws IOException {
+        writeStatsToPrefs(REP_SCORE_KEY, 0);
+        writeStatsToPrefs(REP_TOTAL_KEY, 0);
+        writeStatsToPrefs(REC_SCORE_KEY, 0);
+        writeStatsToPrefs(REC_TOTAL_KEY, 0);
+    }
+
     private void writeStatsToPrefs(String key, int stat) throws IOException {
+        prefEditor = prefs.edit();
         prefEditor.putInt(key, stat);
         prefEditor.apply();
     }

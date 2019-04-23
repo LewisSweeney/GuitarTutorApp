@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tab_symbols">
+        <item>h</item>
+        <item>p</item>
+        <item>b</item>
+        <item>r</item>
+        <item>/</item>
+        <item>\\</item>
+        <item>v</item>
+        <item>t</item>
+        <item>s</item>
+        <item>S</item>
+        <item>*</item>
+        <item>[n]</item>
+        <item>n(n)</item>
+        <item>tr</item>
+        <item>T</item>
+        <item>TP</item>
+        <item>PM</item>
+        <item>\\n/</item>
+        <item>\\n</item>
+        <item>n/</item>
+        <item>/n\</item>
+        <item>=</item>
+        <item>&lt;&gt;></item>
+        <item>·/.</item>
+    </string-array>
+
+
+    <string-array name="tab_symbol_descriptions">
+        <item>Hammer on</item>
+        <item>Pull off</item>
+        <item>Bend string up</item>
+        <item>Release bend</item>
+        <item>Slide up</item>
+        <item>Slide down</item>
+        <item>Vibrato</item>
+        <item>Right hand tap</item>
+        <item>Legato slide</item>
+        <item>Shift slide</item>
+        <item>Natural harmonic</item>
+        <item>Artificial harmonic</item>
+        <item>Tapped harmonic</item>
+        <item>Trill</item>
+        <item>Tap</item>
+        <item>Tremolo picking</item>
+        <item>Palm muting</item>
+        <item>Tremolo arm dip, where n is the amount to dip</item>
+        <item>Tremolo arm down</item>
+        <item>Tremolo arm up</item>
+        <item>Tremolo arm inverted dip</item>
+        <item>Hold a bend, or a connecting device for hammers/pulls</item>
+        <item>Volume swell (louder or softer)></item>
+        <item>Pick slide</item>
+    </string-array>
+
+    <string-array name="settings_titles">
+        <item>Clear Game Data</item>
+    </string-array>
+
+    <string-array name="settings_description">
+        <item>Delete all data from note recognition and playback games</item>
+    </string-array>
+</resources>

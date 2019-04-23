@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.learn;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.BadgeAdapter;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters.BadgeAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Badge;

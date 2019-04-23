@@ -32,7 +32,7 @@ import java.util.Objects;
 
 import be.tarsos.dsp.AudioDispatcher;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.SpinnerAdapter;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters.SpinnerAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;

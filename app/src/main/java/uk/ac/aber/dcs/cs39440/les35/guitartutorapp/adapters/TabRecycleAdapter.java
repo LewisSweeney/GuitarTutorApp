@@ -1,15 +1,16 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
 public class TabRecycleAdapter extends RecyclerView.Adapter<TabRecycleAdapter.TabViewHolder> {
 

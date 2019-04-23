@@ -185,7 +185,6 @@
             app:layout_constraintRight_toRightOf="@id/semicircle"
             app:layout_constraintTop_toBottomOf="@id/semicircle" />
 
-
         <Button
             android:id="@+id/startTuner"
             android:layout_width="wrap_content"

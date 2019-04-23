@@ -17,7 +17,7 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.MyApplication;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 
-@Database(entities = {Note.class, Chord.class}, version = 2
+@Database(entities = {Note.class, Chord.class}, version = 2, exportSchema = false
 )
 
 public abstract class GuitarRoomDatabase extends RoomDatabase {

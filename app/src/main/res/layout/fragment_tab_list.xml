@@ -32,81 +32,37 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:text="@string/tab_listen_title"
-
         app:layout_constraintBottom_toTopOf="@+id/switch_listen"
-        app:layout_constraintStart_toStartOf="@+id/switch_listen" />
+        app:layout_constraintStart_toStartOf="@+id/switch_listen"
+        app:layout_constraintTop_toBottomOf="@id/tab_spinner"/>
 
     <Switch
         android:id="@+id/switch_listen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/tab_recycler"
-        app:layout_constraintStart_toEndOf="@+id/radiogroup_autoscroll"
-        app:layout_constraintTop_toTopOf="@+id/radiogroup_autoscroll" />
+        app:layout_constraintStart_toStartOf="@id/tab_spinner"
+        app:layout_constraintTop_toBottomOf="@id/tab_listen_title"/>
 
     <TextView
-        android:id="@+id/tab_autoscroll_title"
+        android:id="@+id/please_play"
+        android:text="@string/please_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="@string/tab_autoscroll_title"
-        app:layout_constraintBottom_toTopOf="@+id/radiogroup_autoscroll"
-        app:layout_constraintLeft_toLeftOf="@id/tab_spinner"
-        app:layout_constraintTop_toBottomOf="@id/tab_spinner" />
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/switch_listen"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-    <RadioGroup
-        android:id="@+id/radiogroup_autoscroll"
+    <TextView
+        android:id="@+id/next_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="@id/tab_spinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_autoscroll_title">
+        android:textSize="32sp"
+        android:text="@string/default_score_text"
+        app:layout_constraintTop_toBottomOf="@id/please_play"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radio_off"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/autoscroll_off"
-                android:buttonTint="@color/black"/>
-
-            <RadioButton
-                android:id="@+id/radio_medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/autoscroll_medium"
-                android:buttonTint="@color/black"/>
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radio_slow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/autoscroll_slow"
-                android:buttonTint="@color/black"/>
-
-            <RadioButton
-                android:id="@+id/radio_fast"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/autoscroll_fast"
-                android:buttonTint="@color/black"/>
-        </LinearLayout>
-    </RadioGroup>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tab_recycler"
@@ -120,7 +76,7 @@
         android:scrollbarThumbVertical="@android:color/darker_gray"
         android:scrollbars="vertical"
         android:fitsSystemWindows="true"
-        app:layout_constraintTop_toBottomOf="@id/radiogroup_autoscroll"
+        app:layout_constraintTop_toBottomOf="@id/next_note"
         tools:listitem="@layout/tab_layout" />
 
 

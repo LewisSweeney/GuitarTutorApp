@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.learn;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.LearnListAdapter;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters.LearnListAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
 

@@ -76,8 +76,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tab_list_tab">Tabs</string>
-    <string name="tab_learn_tab">Help</string>
+    <string name="tab_list_tab">Scales</string>
+    <string name="tab_learn_tab">Tab Help</string>
+    <string name="tab_neck_tab">Notes</string>
     <string name="autoscroll_off">Off</string>
     <string name="autoscroll_slow">Slow</string>
     <string name="autoscroll_medium">Medium</string>
@@ -187,7 +188,7 @@
     <string name="about_app_title">About This App</string>
     <string name="about_app_body">This app was created as part of my final year project in Aberystwyth University. This app aims to help people to learn to play guitar, with tools to help improve the skills of any level guitarist. The app uses mostly original code, but there are some attributions I would like to make.</string>
     <string name="about_attribution_title">Attributions</string>
-    <string name="attribution_body">TarsosDSP (pitch detection):\nhttps://github.com/JorenSix/TarsosDSP\n\nGuitarChordView (displays guitar chords):\nhttps://github.com/Airsaid/ChordView\n\nList of chords found here:\nhttps://github.com/ap1/chordPractice/blob/master/chords2.csv\n\nApp Icon adapted from icon by itim2101 on:\nhttps://www.flaticon.com/\n\nApache License, Version 2.0:\nhttps://www.apache.org/licenses/LICENSE-2.0
+    <string name="attribution_body">TarsosDSP (pitch detection):\nhttps://github.com/JorenSix/TarsosDSP\n\nGuitarChordView (displays guitar chords):\nhttps://github.com/Airsaid/ChordView\n\nList of chords found here:\nhttps://github.com/ap1/chordPractice/blob/master/chords2.csv\n\nApp Icon adapted from icon by itim2101 on:\nhttps://www.flaticon.com/\n\nApache License, Version 2.0:\nhttps://www.apache.org/licenses/LICENSE-2.0\n\nASCII Tab Notation Symbols from Wikipedia:\nhttps://en.wikipedia.org/wiki/ASCII_tab\n\nNotes and Frequencies by MTU:\nhttp://pages.mtu.edu/~suits/notefreqs.html
 
     </string>
     <string name="leave_game_activity">Are you sure you want to leave this screen? Any points you have scored will be lost.</string>
@@ -204,6 +205,10 @@
     <string name="tuner">Tuner</string>
     <string name="learn">Learning Tools</string>
     <string name="title_activity_about">About This App</string>
+    <string name="please_play">Play</string>
+    <string name="resume_game">Resume Game</string>
+    <string name="toast_game_quit">Game quit due to leaving activity</string>
+    <string name="clear_game_data">Are you sure you want to clear all note game data? Any achievements you have will be lost.</string>
 
 
 </resources>

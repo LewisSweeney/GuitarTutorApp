@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,9 +13,14 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.List;
 
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Badge;
 
+
+/**
+ * Adapter class for displaying achievements/badges to the user. Takes 
+ */
 public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder> {
 
     private List<Badge> badgeItemList;
@@ -23,8 +28,10 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
 
 
     /**
-     * Sub-class LearnViewHolder extends on RecyclerView.VIewHolder
-     * Contains the TextView views for displaying the text from each Learn object
+     * Sub-class BadgeViewHolder extends on RecyclerView.VIewHolder
+     * Contains the TextView views for displaying the text from each Badge Object, as well as
+     * a rating bar that functions as an indicator for whether a user has achieved the specified
+     * achievement
      */
     class BadgeViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         private final TextView badgeTitleView;

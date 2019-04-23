@@ -24,8 +24,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.BadgesFragment;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.LearnFragment;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.learn.BadgesFragment;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.learn.LearnFragment;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tuning.TuningFragment;
 
 public class MainActivity extends AppCompatActivity implements LearnFragment.OnFragmentInteractionListener, TuningFragment.OnFragmentInteractionListener, BadgesFragment.OnFragmentInteractionListener {

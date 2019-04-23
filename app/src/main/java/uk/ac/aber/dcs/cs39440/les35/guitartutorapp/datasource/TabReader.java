@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
 public class TabReader {
     private AssetManager am;
@@ -34,6 +36,7 @@ public class TabReader {
     }
 
     public String[] getTabNames() throws IOException {
+        tabNoteIds.clear();
         List<String> tabNames = new ArrayList<>();
         for (String file : files) {
             filename = "scales/" + file;
@@ -81,6 +84,7 @@ public class TabReader {
     }
 
     private String[] constructTabStave(String line) {
+
         line = line.replace("[", "");
         line = line.replace("]", "");
         String[] stringsForTab = context.getResources().getStringArray(R.array.tab_string_notes);

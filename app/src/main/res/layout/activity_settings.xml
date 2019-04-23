@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
     <android.support.constraint.ConstraintLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.SettingsActivity">
+        tools:context="uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.SettingsActivity"
+        android:background="@color/colorWhite">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -24,6 +26,14 @@
 
 
         </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/settings_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+
+        </android.support.v7.widget.RecyclerView>
 
     </android.support.constraint.ConstraintLayout>
 
