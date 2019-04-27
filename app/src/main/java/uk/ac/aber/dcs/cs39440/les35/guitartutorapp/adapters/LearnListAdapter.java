@@ -21,6 +21,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordsViewModel;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.ChordsActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.MetronomeActivity;
@@ -42,6 +44,9 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
     private Context context;
     private Activity activity;
     public boolean isClickable = true;
+
+    NotesViewModel notesViewModel;
+    ChordsViewModel chordsViewModel;
 
 
     /**
