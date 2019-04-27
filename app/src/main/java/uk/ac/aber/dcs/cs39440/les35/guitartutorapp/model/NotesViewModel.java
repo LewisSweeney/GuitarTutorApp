@@ -4,11 +4,12 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.NotesRepository;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 
+/**
+ * ViewModel for accessing Notes data from the RoomDatabase, through multiple layers of abstraction
+ */
 public class NotesViewModel extends AndroidViewModel {
     // Repository for DB access
     private NotesRepository repo;

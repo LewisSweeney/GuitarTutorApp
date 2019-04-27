@@ -16,6 +16,9 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tabs.TabLearnFragment;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tabs.TabListFragment;
 
+/**
+ * Activity for displaying tabs, scales and help for playing tabs within fragments
+ */
 public class TabActivity extends AppCompatActivity implements TabListFragment.OnFragmentInteractionListener, TabLearnFragment.OnFragmentInteractionListener{
 
 
@@ -89,7 +92,6 @@ public class TabActivity extends AppCompatActivity implements TabListFragment.On
             return null;
         }
     }
-
 
 
     @Override

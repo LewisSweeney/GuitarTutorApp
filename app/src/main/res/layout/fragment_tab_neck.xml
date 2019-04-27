@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tabs.TabNeckFragment">
+    >
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

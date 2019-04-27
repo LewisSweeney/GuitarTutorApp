@@ -1,5 +1,7 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tabs;
 
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
@@ -38,7 +40,7 @@ public class TabListFragment extends Fragment {
 
     private static final int REQUEST_MICROPHONE = 1;
     private static final int ACCESS_REQUESTED = 1;
-    private static final int NOTE_LEEWAY = 8;
+    private static final int NOTE_LEEWAY = 25;
 
     Boolean detectingNote = false;
 
@@ -118,9 +120,18 @@ public class TabListFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(liveFeedbackSwitch.isChecked()){
-                    initialiseFeedback();
+                    try {
+                        initialiseFeedback();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else{
-                    endFeedback();
+                    try {
+                        detectingNote = false;
+                        endFeedback();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -142,6 +153,8 @@ public class TabListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity().getApplicationContext()));
 
+        startFeedback();
+
         return view;
     }
 
@@ -154,7 +167,11 @@ public class TabListFragment extends Fragment {
         tabSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                setTab(position);
+                try {
+                    setTab(position);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -166,7 +183,7 @@ public class TabListFragment extends Fragment {
 
     }
 
-    private void setTab(int pos) {
+    private void setTab(int pos) throws IOException {
         endFeedback();
         try {
             tabReader = new TabReader(this.getActivity().getApplicationContext(), openNoteIds);
@@ -255,7 +272,7 @@ public class TabListFragment extends Fragment {
         audioThread.start();
     }
 
-    private void nextNote(){
+    private void nextNote() throws IOException {
         tabNoteIndex++;
         if(tabNoteIndex < tabNotes.size()){
             currentRequiredNote = tabNotes.get(tabNoteIndex);
@@ -265,7 +282,7 @@ public class TabListFragment extends Fragment {
         }
     }
 
-    private void initialiseFeedback(){
+    private void initialiseFeedback() throws IOException {
         tabNoteIndex = 0;
         if(tabNoteIndex < tabNotes.size()){
             currentRequiredNote = tabNotes.get(tabNoteIndex);
@@ -277,10 +294,28 @@ public class TabListFragment extends Fragment {
         }
     }
 
-    private void endFeedback(){
+    private void endFeedback() throws IOException {
+        if(detectingNote){
+            playSound();
+        }
         tabNoteIndex = 0;
         nextNote.setText("");
         detectingNote = false;
+        liveFeedbackSwitch.setChecked(false);
+
+    }
+
+    /**
+     * Used to play a sound when a user finishes playing the current tab
+     * @throws IOException
+     */
+    private void playSound() throws IOException {
+        AssetFileDescriptor afd;
+        afd = getActivity().getAssets().openFd(getString(R.string.sound_intune));
+        MediaPlayer mPlayer = new MediaPlayer();
+        mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+        mPlayer.prepare();
+        mPlayer.start();
     }
 
     @Override

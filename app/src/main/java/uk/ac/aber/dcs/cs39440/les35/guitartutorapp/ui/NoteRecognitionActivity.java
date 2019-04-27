@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +29,10 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 
+/**
+ * Runs a game that plays a note and gives the user multiple choices to answer what note they think
+ * the app is playing
+ */
 public class NoteRecognitionActivity extends AppCompatActivity {
 
     final int BUTTON_NUMBER = 3;
@@ -133,11 +138,7 @@ public class NoteRecognitionActivity extends AppCompatActivity {
             @Override
             public void run() {
                 while (true) {
-                    try {
-                        playNote();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    playNote();
                 }
             }
         });
@@ -168,7 +169,6 @@ public class NoteRecognitionActivity extends AppCompatActivity {
     /**
      * Resets the ID arraylist to allow for random generation of note IDs again
      * Then shuffles the list to effectively randomly choose the note IDs.
-     * <p>
      * The reason for this instead of generating numbers on the fly is so that each
      * note ID is guaranteed to be unique, to avoid issues.
      */
@@ -181,6 +181,9 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         Collections.shuffle(buttonIdList);
     }
 
+    /**
+     * Changes the visual state of the play button depending on the previous state
+     */
     private void changePlayPauseButtonState() {
         if (isPlaying) {
             playPauseButton.setImageDrawable(playButton);
@@ -193,6 +196,11 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         System.out.println(isPlaying);
     }
 
+    /**
+     * Checks if the button the user pressed is the correct answer, increments score by one if required.
+     * Then checks for game end parameters, and if the game should carry on, calls nextQuestion()
+     * @param clickedButton
+     */
     private void buttonClicked(Button clickedButton) {
         totalAnswered++;
         if (clickedButton.equals(correctAnswerButton)) {
@@ -206,8 +214,11 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Loads the next question for the app, changing any required textviews, appending the user's
+     * score and progress
+     */
     private void nextQuestion() {
-
         scoreDisplay.setText(Integer.toString(score));
         StringBuilder stringBuild = new StringBuilder();
         stringBuild.append(totalAnswered);
@@ -230,12 +241,21 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         }
     }
 
-    private void playNote() throws InterruptedException {
+    /**
+     * Checks that the note should currently be playing, and plays it with the duration 44100 if so
+     */
+    private void playNote() {
         if (isPlaying) {
             playSound(currentNoteFrequency, 44100);
         }
     }
 
+    /**
+     * Generates a sine wave at the specified frequency for the specified duration
+     * (44100 in duration = 1 second)
+     * @param frequency Frequency for the required note. Always the note for the correct answer
+     * @param duration
+     */
     private void playSound(double frequency, int duration) {
         System.out.println("PLAYING SOUND");
 
@@ -264,6 +284,11 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         mAudioTrack.release();
     }
 
+    /**
+     * Method run when the user has answered the number of questions specified by the static
+     * NUMBER_OF_QUESTIONS. Sets score displays, alerts user of their final score and sets isPlaying to false,
+     * meaning that the pitch will no longer be analysed
+     */
     private void endGame() {
         scoreDisplay.setText(Integer.toString(score));
         StringBuilder stringBuild = new StringBuilder();
@@ -291,6 +316,10 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Writes stats via the DataManager class then closes the activity
+     * @throws IOException
+     */
     private void closeActivity() throws IOException {
         DataManager dataManager = new DataManager(this);
         dataManager.writeStats(StatType.RECSCORE, score);
@@ -298,6 +327,22 @@ public class NoteRecognitionActivity extends AppCompatActivity {
         this.finish();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return false;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    /**
+     * Warns the user that leaving this screen will make them lose any points they have gained for
+     * this specific game session
+     */
     @Override
     public void onBackPressed(){
 

@@ -14,6 +14,10 @@ import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
+/**
+ * Reads strings stored in compressed tab format and constructs them into readable ASCII format tabs
+ * for the user to see. Also capable of returning the names of all available tabs.
+ */
 public class TabReader {
     private AssetManager am;
     InputStream is;
@@ -35,6 +39,11 @@ public class TabReader {
         this.openNoteIds = openNoteIds;
     }
 
+    /**
+     * Gets the names of all the available tabs for display in the
+     * @return
+     * @throws IOException
+     */
     public String[] getTabNames() throws IOException {
         tabNoteIds.clear();
         List<String> tabNames = new ArrayList<>();
@@ -58,6 +67,12 @@ public class TabReader {
 
     }
 
+    /**
+     * Returns a specified tab by its position in the tabs spinner
+     * @param position
+     * @return
+     * @throws IOException
+     */
     public List<String> getTab(int position) throws IOException {
         String line;
         String[] tabStave;
@@ -83,8 +98,15 @@ public class TabReader {
         return tab;
     }
 
+    /**
+     * Takes the strings read in and iterates over the strings to construct a readable
+     * ASCII tab format guitar tablature
+     * @param line
+     * @return
+     */
     private String[] constructTabStave(String line) {
 
+        // Splits the compressed tab format into smaller chunks to be iterated over
         line = line.replace("[", "");
         line = line.replace("]", "");
         String[] stringsForTab = context.getResources().getStringArray(R.array.tab_string_notes);

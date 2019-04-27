@@ -8,7 +8,6 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -46,6 +46,10 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.InstrumentType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
+/**
+ * Activity to help users tune their guitar using microphone pitch detection, powered by TarsosDSP
+ * https://github.com/JorenSix/TarsosDSP
+ */
 public class TuningActivity extends AppCompatActivity {
 
     // Static integers required as permission codes for requesting and checking permissions
@@ -108,8 +112,9 @@ public class TuningActivity extends AppCompatActivity {
         // Adds the toolbar to the screen
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        assert actionbar != null;
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         notesView = ViewModelProviders.of(this).get(NotesViewModel.class);
         // Inflate the layout for this fragment
@@ -138,6 +143,11 @@ public class TuningActivity extends AppCompatActivity {
         checkPermissions();
     }
 
+    /**
+     * Starts the tuner if the checkPermissions returns that the user has granted microphone permission
+     * Runs a TarsosDSP AudioDispatcher on a separate thread that takes microphone input and feeds it
+     * into the processPitch method repeatedly unless interrupted/stopped
+     */
     public void startTuner() {
 
         // Creates a new TarsosDSP PitchDetectionHandler, which does the work of detecting what
@@ -245,7 +255,17 @@ public class TuningActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Sets the rotation of the gauge according to the correctness of the note the user is playing
+     * compared to how far away it is to being in tune
+     * Calculates the distance of the passed in pitch is from being within the leeway range of the tuning
+     * @param pitchInHz
+     * @param currentClosestNote
+     * @param centDown
+     * @param centUp
+     * @param previousNote
+     * @param nextNote
+     */
     private void setGaugeRotation(float pitchInHz, Note currentClosestNote, float centDown, float centUp, Note previousNote, Note nextNote) {
         if (pitchInHz < currentClosestNote.getFrequency()) {
             float angle;
@@ -450,14 +470,11 @@ public class TuningActivity extends AppCompatActivity {
         }
     }
 
+
     /**
-     * Required method for extending Fragment
+     * Checks the permissions of the app to see whether the user has granted microphone recording permissions
+     * If the user has not it prompts them to grant this permission
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
-
-
     private void checkPermissions() {
         // Checks if the RECORD_AUDIO permission is granted, and if it is not it prompts the user to
         // allow this permission.
@@ -480,6 +497,11 @@ public class TuningActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Changes the state of the  "Start Tuner" button, to visible or invisible depending on
+     * whether the button needs to be displayed or not
+     * @param state
+     */
     private void buttonStateChange(boolean state) {
         startTunerButton.setClickable(state);
         if (state) {
@@ -490,6 +512,10 @@ public class TuningActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * If the tuner isn't running and there are no permissions to allow it, this prompts the user
+     * to grant the permission through their device settings
+     */
     private void onStartTunerButtonClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.permission_alert_title));
@@ -505,6 +531,13 @@ public class TuningActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * If the permission is not granted the app will notify the user of such, if the permission is granted the app
+     * will start running the tuning thread
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -524,6 +557,9 @@ public class TuningActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Restarts the tuner after an activity pause
+     */
     private void restartTuner() {
         if(dispatcher != null){
             checkPermissions();
@@ -537,6 +573,10 @@ public class TuningActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Run when the activity is paused, setting the starttuner button to visible and making the button
+     * restart the tuner on click
+     */
     private void activityPaused() {
         if (dispatcher != null) {
             dispatcher.stop();
@@ -551,6 +591,18 @@ public class TuningActivity extends AppCompatActivity {
             });
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return false;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     @Override
     public void onPause() {

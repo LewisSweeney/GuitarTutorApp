@@ -1,6 +1,6 @@
-rep,Copycat (Beginner),Finish the note repetition game 5 times,g,5
-rep,Copycat (Advanced),Finish the note repetition game 25 times,g,25
-rep,Ditto,Correctly copy 50 notes in the note repetition game,s,50
+rep,Copycat (Beginner),Finish the note playback game 5 times,g,5
+rep,Copycat (Advanced),Finish the note playback game 25 times,g,25
+rep,Ditto,Correctly copy 50 notes in the note playback game,s,50
 rec,Pitch Perfecter (Beginner),Finish the note recognition game 5 times,g,5
 rec,Pitch Perfecter (Advanced),Finish the note recognition game 25 times,g,25
 rec,Perfect Pitch,Correctly identify 50 notes in the note recognition game,s,50

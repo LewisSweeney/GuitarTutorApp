@@ -6,6 +6,10 @@ import android.os.AsyncTask;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordDAO;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 
+/**
+ * Repository that acts as a middleman between the ChordsViewModel available to the rest of the
+ * code, and the ChordsDAO that interfaces directly with the RoomDatabase
+ */
 public class ChordsRepository {
 
     // Data access object to allow interaction with the Chords table/entity

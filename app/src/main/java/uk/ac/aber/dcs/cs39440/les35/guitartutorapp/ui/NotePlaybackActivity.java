@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,16 +34,20 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 
+/**
+ * This activity runs a game that requires the user to play a note prompted on screen
+ * A user is rewarded a point for a correct answer
+ */
 public class NotePlaybackActivity extends AppCompatActivity {
 
     // Notes 5 cents either way of the exact frequency
-    final double noteLeeway = 5;
+    final double noteLeeway = 20;
 
     // The number of questions a user is required to answer
     final int NUMBER_OF_QUESTIONS = 5;
 
     // The IDs for the notes that the first 12 frets on each string of the guitar can play
-    int lowerBoundID = 28;
+    int lowerBoundID = 29;
     int upperBoundID = 64;
 
     // Integer that determines how many "checks" of the current frequency must be in tune for
@@ -114,6 +119,9 @@ public class NotePlaybackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Starts pitch detection thread using TarsosDSP AudioDispatcher
+     */
     private void startDetection() {
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
@@ -172,6 +180,11 @@ public class NotePlaybackActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Calculates how many pitches detected in the past specified amount are correct, and if more
+     * pitches were in the correct range than not, a point is awarded
+     * @throws IOException
+     */
     private void calculateCorrectness() throws IOException {
         int correct = 0;
         int incorrect = 0;
@@ -185,13 +198,20 @@ public class NotePlaybackActivity extends AppCompatActivity {
         }
 
         if(correct >= incorrect){
-            notePlayedIsCorrect(true);
+            finishQuestion(true);
         } else{
-            notePlayedIsCorrect(false);
+            finishQuestion(false);
         }
     }
 
-    private void notePlayedIsCorrect(boolean correct) throws IOException {
+    /**
+     * Finishes the current question and sets the next question button to clickable allowing the user
+     * to navigate to the next question
+     * Points awarded for correct answers are done in this method
+     * @param correct
+     * @throws IOException
+     */
+    private void finishQuestion(boolean correct) throws IOException {
         detectingNote = false;
         nextQuestionButton.setClickable(true);
         if(correct){
@@ -214,6 +234,9 @@ public class NotePlaybackActivity extends AppCompatActivity {
         correctnessList.clear();
     }
 
+    /**
+     * Finishes the game by prompting the user of their final score and then running the closeActivity method
+     */
     private void endGame() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -230,6 +253,10 @@ public class NotePlaybackActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Writes new stats to the SharedPreferences using the DataManager class
+     * @throws IOException
+     */
     private void closeActivity() throws IOException {
         DataManager dataManager = new DataManager(this);
         dataManager.writeStats(StatType.REPSCORE, userScore);
@@ -237,13 +264,18 @@ public class NotePlaybackActivity extends AppCompatActivity {
         this.finish();
     }
 
+    /**
+     * Sets the scores and total textviews to reflect their most recent values
+     */
     private void setScores() {
         score.setText(Integer.toString(userScore));
         total.setText(Integer.toString(totalAnswered) + "/" + Integer.toString(NUMBER_OF_QUESTIONS));
     }
 
+    /**
+     * Sets parameters for the next question
+     */
     private void setNextQuestion() {
-        System.out.println("BUTTON CLICK");
         if(totalAnswered < NUMBER_OF_QUESTIONS){
             Collections.shuffle(requiredNotes);
             currentRequiredNote = requiredNotes.get(0);
@@ -268,12 +300,20 @@ public class NotePlaybackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sets parameters for the next question and sets detecting the note back to true
+     */
     private void onNextQuestionButtonClick() {
         setScores();
         setNextQuestion();
         detectingNote = true;
     }
 
+    /**
+     * Used to play a correct or incorrect sound depending on whether a user plays the correct note
+     * @param correct
+     * @throws IOException
+     */
     private void playSound(boolean correct) throws IOException {
         AssetFileDescriptor afd;
         if(correct){
@@ -287,6 +327,10 @@ public class NotePlaybackActivity extends AppCompatActivity {
         mPlayer.start();
     }
 
+    /**
+     * On pressing back, the user is notified they will lose all game progress if they leave the activity
+     * If they agree to this, the activity closes via the closeActivity() method
+     */
     @Override
     public void onBackPressed(){
 
@@ -312,6 +356,18 @@ public class NotePlaybackActivity extends AppCompatActivity {
         builder.show();
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return false;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     @Override
     public void onPause() {

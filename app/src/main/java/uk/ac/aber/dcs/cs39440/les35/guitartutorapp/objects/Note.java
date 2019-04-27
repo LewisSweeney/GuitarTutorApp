@@ -2,8 +2,10 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 
+/**
+ * Note objects stored in the room database, storing the note's name and frequency
+ */
 @Entity(tableName= "notes")
 public class Note {
     @PrimaryKey(autoGenerate = true)

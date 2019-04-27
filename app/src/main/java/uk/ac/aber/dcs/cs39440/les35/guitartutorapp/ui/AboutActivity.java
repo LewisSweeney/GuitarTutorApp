@@ -12,6 +12,10 @@ import android.view.MenuItem;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
+/**
+ * Activity for displaying the "about" information about the application, including citations and
+ * references to resources that helped me build the app
+ */
 public class AboutActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;

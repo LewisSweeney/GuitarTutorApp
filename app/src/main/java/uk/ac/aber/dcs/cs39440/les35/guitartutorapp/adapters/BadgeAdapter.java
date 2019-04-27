@@ -19,7 +19,8 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Badge;
 
 
 /**
- * Adapter class for displaying achievements/badges to the user. Takes 
+ * Adapter class for displaying achievements/badges to the user. Takes input from the DataManager
+ * class and displays them for each achievement
  */
 public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder> {
 
@@ -48,6 +49,7 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
             itemView.setOnCreateContextMenuListener(this);
         }
 
+        // Empty required method
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
@@ -66,7 +68,7 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
 
 
     /**
-     * Method to create a new LearnViewHolder
+     * Method to create a new BadgeViewHolder
      * Required for extending RecyclerView.Adapter
      *
      * @param parent
@@ -80,6 +82,10 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
         return new BadgeViewHolder(view);
     }
 
+    /** Binds each badge data to a badge_item layout item
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull BadgeViewHolder holder, final int position) {
         int[][] stats = new int[2][2];
@@ -142,6 +148,10 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
         }
     }
 
+    /**
+     * Gets number of badge items
+     * @return
+     */
     @Override
     public int getItemCount() {
         return badgeItemList.size();

@@ -1,5 +1,8 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects;
 
+/**
+ * Class for storing badge data for access by the Badges fragment
+ */
 public class Badge {
 
     private String name;

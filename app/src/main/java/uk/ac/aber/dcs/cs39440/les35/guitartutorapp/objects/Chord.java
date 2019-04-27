@@ -2,8 +2,11 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 
+/**
+ * Chord objects stored in the room database, storing information about what notes need to be fretted,
+ * at what fret the fretting starts and the chord's name
+ */
 @Entity(tableName = "chords")
 public class Chord {
     @PrimaryKey(autoGenerate = true)

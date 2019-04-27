@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
+/**
+ * Splash screen that runs on app start up that moves quickly over to the MainActivity
+ */
 public class SplashScreenActivity extends AppCompatActivity {
 
     @Override

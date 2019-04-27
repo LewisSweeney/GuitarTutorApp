@@ -20,11 +20,16 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 @Database(entities = {Note.class, Chord.class}, version = 2, exportSchema = false
 )
 
+/**
+ * Room Database class that contains entities for Notes and Chords, and is the direct accessor for
+ * the database data
+ */
 public abstract class GuitarRoomDatabase extends RoomDatabase {
 
     private static GuitarRoomDatabase INSTANCE;
 
     public abstract NotesDAO getNotesDao();
+
     public abstract ChordDAO getChordsDao();
 
     // public abstract TuningDAO getTuningDao();
@@ -34,17 +39,9 @@ public abstract class GuitarRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (GuitarRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), GuitarRoomDatabase.class, "guitar_database").allowMainThreadQueries().addMigrations(MIGRATION_1_2).addCallback(sRoomDatabaseCallback).build();
-                     /* Do the following when migrating
-                     to a new version of the database
-                     INSTANCE =
-                     Room.databaseBuilder(
-                     context.getApplicationContext(),
-                     FaaRoomDatabase.class,
-                     "faa_database").addMigrations(MIGRATION_1_2, G
-                     MIGRATION_2_3) H
-                     .build();
-*/
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), GuitarRoomDatabase.class, "guitar_database")
+                            .allowMainThreadQueries().addMigrations(MIGRATION_1_2).addCallback(sRoomDatabaseCallback).build();
+
                 }
             }
         }

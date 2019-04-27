@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.ChordsRepository;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 
+/**
+ * ViewModel for accessing Chords data from the RoomDatabase, through multiple layers of abstraction
+ */
 public class ChordsViewModel extends AndroidViewModel {
     // Repository for DB access
     private ChordsRepository repo;
@@ -20,8 +23,7 @@ public class ChordsViewModel extends AndroidViewModel {
     }
 
     /**
-     * Inserts notes into the DB
-     *
+     * Inserts notes into the Room DataBase
      * @param chord
      */
     public void insert(Chord[] chord) {

@@ -12,6 +12,9 @@ import java.util.List;
 
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
+/**
+ * Adapts tabs fed through from the DataManager into displayble blocks of ASCII tab
+ */
 public class TabRecycleAdapter extends RecyclerView.Adapter<TabRecycleAdapter.TabViewHolder> {
 
     private List<String> tabList;
@@ -25,7 +28,7 @@ public class TabRecycleAdapter extends RecyclerView.Adapter<TabRecycleAdapter.Ta
     }
 
     /**
-     * Constructor for the WordListAdapter
+     * Constructor for the TabRecycleAdapter
      * @param context
      */
     public TabRecycleAdapter(Context context){LayoutInflater inflater = LayoutInflater.from(context);

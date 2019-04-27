@@ -42,7 +42,6 @@
         <activity android:name=".ui.TuningActivity"
             android:label="@string/title_activity_tuning"
             android:theme="@style/AppTheme"/>
-        <activity android:name=".ui.ScalesActivity" />
         <activity android:name=".ui.NotePlaybackActivity" />
         <activity android:name=".ui.NoteRecognitionActivity" />
         <activity android:name=".ui.MetronomeActivity" />

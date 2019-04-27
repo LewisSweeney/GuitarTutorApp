@@ -20,29 +20,41 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Tuning;
 
+/**
+ * DataManager is a class that manages csv, txt and SharedPreference reading.
+ * Allows for a central class for retrieval and writing of important app data
+ */
 public class DataManager {
 
-    SharedPreferences prefs;
-    SharedPreferences.Editor prefEditor;
+    // SharedPreferences you used to store scores for the note recognition and palyback games
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor prefEditor;
 
-    AssetManager am;
-    InputStream is;
-    String filename;
-    BufferedReader reader;
-    String line = "";
-    Context context;
-    Note[] notes;
-    List<Tuning> tunings = new ArrayList<>();
-    Chord[] chords;
-    List<String> badgeStrings = new ArrayList<>();
-    int[][] stats = new int[2][2];
 
-    final String REP_SCORE_KEY = "repscore";
-    final String REP_TOTAL_KEY = "reptotal";
-    final String REC_SCORE_KEY = "recscore";
-    final String REC_TOTAL_KEY = "rectotal";
+    private AssetManager am;
+    private InputStream is;
+    private String filename;
+    private BufferedReader reader;
+    private String line = "";
+    private Context context;
+    private Note[] notes;
+    private List<Tuning> tunings = new ArrayList<>();
+    private Chord[] chords;
+    private List<String> badgeStrings = new ArrayList<>();
+    private int[][] stats = new int[2][2];
 
-    public DataManager(Context context) throws IOException {
+    // Keys for accessing the correct SharedPreferences
+    private final String REP_SCORE_KEY = "repscore";
+    private final String REP_TOTAL_KEY = "reptotal";
+    private final String REC_SCORE_KEY = "recscore";
+    private final String REC_TOTAL_KEY = "rectotal";
+
+    /**
+     * Constructor takes context as a parameter to allow for the DataManager to access things such as
+     * the AssetManager class that requires an activity context
+     * @param context
+     */
+    public DataManager(Context context) {
         am = context.getAssets();
         this.context = context;
         notes = new Note[108];
@@ -51,7 +63,12 @@ public class DataManager {
 
     }
 
-    public void readNotes() throws IOException {
+    /**
+     * Reads musical notes from the notes.csv file. Used only once on initial app start up to
+     * populate the Room Database
+     * @throws IOException
+     */
+    void readNotes() throws IOException {
         filename = context.getResources().getString(R.string.notes_file_name);
         is = am.open(filename);
         reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -69,6 +86,14 @@ public class DataManager {
         }
     }
 
+    /**
+     * Reads all tunings from the tunings.csv file for retrieval by the Tuning activity
+     * Determines the instrument type from the file. Has ability to read ukulele tunings, which
+     * are currently not included in the app
+     * Each tuning is made into an object and stored in an Arraylist
+     * @param notesFromDB
+     * @throws IOException
+     */
     public void readTunings(Note[] notesFromDB) throws IOException {
         filename = context.getResources().getString(R.string.tuning_file_name);
         is = am.open(filename);
@@ -122,7 +147,11 @@ public class DataManager {
         }
     }
 
-
+    /**
+     * Reads chords in from the chords.csv and stores them for reading by the Chords activity
+     * Each chord is stored as its own Chord object and stored in an Arraylist
+     * @throws IOException
+     */
     public void readChords() throws IOException {
         filename = context.getResources().getString(R.string.chords_file_name);
         is = am.open(filename);
@@ -155,6 +184,10 @@ public class DataManager {
 
     }
 
+    /**
+     * Simple read of the badges/achievements, creating an object for each of them
+     * @throws IOException
+     */
     public void readBadges() throws IOException {
         filename = context.getResources().getString(R.string.badges_file_name);
         is = am.open(filename);
@@ -170,6 +203,10 @@ public class DataManager {
         }
     }
 
+    /**
+     * Reads the game stats, using the static keys for access
+     * @throws IOException
+     */
     public void readStats() throws IOException {
 
         int defaultValue = context.getResources().getInteger(R.integer.saved_stats_default_key);
@@ -180,6 +217,12 @@ public class DataManager {
 
     }
 
+    /**
+     * Takes a stat type and integer "stat" increment, which is then fed into the "writeStatsToPrefs" method*
+     * @param statType StatType required for determining which stat type is being written to
+     * @param stat Integer to increment the specified stat by
+     * @throws IOException
+     */
     public void writeStats(StatType statType, int stat) throws IOException {
         int defaultValue = context.getResources().getInteger(R.integer.saved_stats_default_key);
         prefEditor = prefs.edit();
@@ -214,6 +257,10 @@ public class DataManager {
         }
     }
 
+    /**
+     * Clears the stats for the note games, called by SettingsActivity
+     * @throws IOException
+     */
     public void clearStats() throws IOException {
         writeStatsToPrefs(REP_SCORE_KEY, 0);
         writeStatsToPrefs(REP_TOTAL_KEY, 0);
@@ -221,28 +268,54 @@ public class DataManager {
         writeStatsToPrefs(REC_TOTAL_KEY, 0);
     }
 
+    /**
+     *
+     * @param key The key for which stat should be written to
+     * @param stat The stat to be written, no increment, final value
+     * @throws IOException
+     */
     private void writeStatsToPrefs(String key, int stat) throws IOException {
         prefEditor = prefs.edit();
         prefEditor.putInt(key, stat);
         prefEditor.apply();
     }
 
+    /**
+     * Notes read by readNotes()
+     * @return
+     */
     public Note[] getNotes() {
         return notes;
     }
 
+    /**
+     * Tunings read by readTunings()
+     * @return
+     */
     public List<Tuning> getTunings() {
         return tunings;
     }
 
+    /**
+     * Chords read by readChords()
+     * @return
+     */
     public Chord[] getChords() {
         return chords;
     }
 
+    /**
+     * Badges read by readBadges()
+     * @return
+     */
     public List<String> getBadges() {
         return badgeStrings;
     }
 
+    /**
+     * Stats read by readStats()
+     * @return
+     */
     public int[][] getStats() {
         return stats;
     }

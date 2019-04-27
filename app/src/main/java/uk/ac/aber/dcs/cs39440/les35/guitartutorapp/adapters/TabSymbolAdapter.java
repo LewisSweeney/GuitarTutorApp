@@ -14,6 +14,9 @@ import java.io.IOException;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 
+/**
+ * Adapts TabSymbol data from the two specified string arrays, displaying these tab instructions for users
+ */
 public class TabSymbolAdapter extends RecyclerView.Adapter<TabSymbolAdapter.TabSymbolViewHolder> {
 
     private String[] symbolList;
@@ -55,7 +58,7 @@ public class TabSymbolAdapter extends RecyclerView.Adapter<TabSymbolAdapter.TabS
 
 
     /**
-     * Method to create a new LearnViewHolder
+     * Method to create a new TabSymbolViewHolder
      * Required for extending RecyclerView.Adapter
      *
      * @param parent

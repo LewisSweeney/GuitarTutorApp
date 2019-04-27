@@ -17,6 +17,9 @@ import android.widget.LinearLayout;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters.SettingsAdapter;
 
+/**
+ * Displays settings to the user
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     DrawerLayout drawerLayout;

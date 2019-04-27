@@ -3,13 +3,13 @@ package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import java.util.Arrays;
-import java.util.List;
-
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.NotesDAO;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.MyApplication;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Note;
 
+/**
+ * Repository that acts as a middleman between the NotesViewModel available to the rest of the
+ * code, and the NotesDAO that interfaces directly with the RoomDatabase
+ */
 public class NotesRepository {
     // Data access object to allow interaction with the Notes table/entity
     private NotesDAO noteDAO;

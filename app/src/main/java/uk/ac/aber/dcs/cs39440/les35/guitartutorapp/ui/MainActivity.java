@@ -26,9 +26,12 @@ import android.view.MenuItem;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.learn.BadgesFragment;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.learn.LearnFragment;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.fragments.tuning.TuningFragment;
 
-public class MainActivity extends AppCompatActivity implements LearnFragment.OnFragmentInteractionListener, TuningFragment.OnFragmentInteractionListener, BadgesFragment.OnFragmentInteractionListener {
+/**
+ * MainActivty used as a container for the Learn and Badge fragments,
+ * containing navigation to the About and Settings activities
+ */
+public class MainActivity extends AppCompatActivity implements LearnFragment.OnFragmentInteractionListener, BadgesFragment.OnFragmentInteractionListener {
 
     // Static integers required as permission codes for requesting and checking permissions
     private static final int REQUEST_MICROPHONE = 1;

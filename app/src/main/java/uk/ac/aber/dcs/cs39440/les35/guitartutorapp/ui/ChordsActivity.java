@@ -21,7 +21,13 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.Gui
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordsViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 
-
+/**
+ * Activity for displaying chords using a GuitarChordView found here: https://github.com/chRyNaN/GuitarChords
+ * The activity will read chords using a ChordsViewModel and display the information through the
+ * GuitarChordView
+ * This results in lower storage, as each chord doesn't need to be stored as in image
+ * This also indirectly resulted in many chords more than originally intended to be displayed by this app
+ */
 public class ChordsActivity extends AppCompatActivity {
 
     final int TOP_MARGIN_OF_CHART_FOR_MARKERS = 48;
@@ -112,7 +118,6 @@ public class ChordsActivity extends AppCompatActivity {
     private void setChordSpinner() {
         List<Chord> chordsForSpinner = new ArrayList<>();
         String selectedRootNote = rootNoteSpinner.getSelectedItem().toString();
-        System.out.println("SELECTED ROOT NOTE = " + selectedRootNote);
         switch (selectedRootNote) {
             case "A":
                 chordsForSpinner.addAll(getChordsForSpinner("A"));
@@ -190,7 +195,6 @@ public class ChordsActivity extends AppCompatActivity {
         } else if (rootAsArray.length == 1) {
             for (Chord c : chords) {
                 String chordName = c.getName();
-                System.out.println("CHORD NAME = ");
                 char[] chordNameAsArray = chordName.toCharArray();
                 if (chordNameAsArray.length > 1) {
                     if (rootAsArray[0] == chordNameAsArray[0] && chordNameAsArray[1] != '#' && chordNameAsArray[1] != 'b') {
@@ -216,6 +220,9 @@ public class ChordsActivity extends AppCompatActivity {
         drawChord();
     }
 
+    /**
+     * Draws the chord using GuitarChordView
+     */
     private void drawChord() {
         char[] notesAsCharArray = currentChord.getNotes().toCharArray();
         String startFretString = getResources().getString(R.string.start_fret_label) + currentChord.getStartFret().toString();
@@ -223,8 +230,6 @@ public class ChordsActivity extends AppCompatActivity {
         chordFretTextView.setText(startFretString);
         chordView.clear();
         for (int i = 0; i < STRINGS_ON_GUITAR; i++) {
-            System.out.println("CURRENT NOTE = " + notesAsCharArray[i]);
-            System.out.println("CURRENT STRING = " + i + 1);
             if (notesAsCharArray[i] == 'x') {
                 chordView.addNote(-1, 6 - i, 0);
             } else if (notesAsCharArray[i] == '0') {

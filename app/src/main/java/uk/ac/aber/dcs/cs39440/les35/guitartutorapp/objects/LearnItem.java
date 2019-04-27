@@ -1,5 +1,8 @@
 package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects;
 
+/**
+ * Item used to display items within the LearnFragment
+ */
 public class LearnItem {
     private String learnItemName;
     private String learnItemDescription;

@@ -17,6 +17,9 @@ import java.io.IOException;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 
+/**
+ * Adapts settings data and displays them in the settings recyclerview
+ */
 public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder> {
 
     private String[] titleList;
@@ -72,6 +75,11 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         return new SettingsViewHolder(view);
     }
 
+    /**
+     * Binds settings data from the Asset string arrays to the setting recyclerview
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull SettingsViewHolder holder, final int position) {
         try {
@@ -98,6 +106,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         }
     }
 
+    /**
+     * Checks item clicked (currently only one settings option) and runs required method
+     * @param position
+     */
     private void itemClicked(int position){
         switch(position){
             case 0:
@@ -108,6 +120,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         }
     }
 
+    /**
+     * Calls the DataManager clearStats method to set all game stats to 0
+     * Called when the settings option is clicked and confirmed
+     */
     private void clearData(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(context.getResources().getString(R.string.clear_game_data));

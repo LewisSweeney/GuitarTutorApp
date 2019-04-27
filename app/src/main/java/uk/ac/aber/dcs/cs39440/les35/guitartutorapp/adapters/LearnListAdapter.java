@@ -29,6 +29,9 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.NoteRecognitionActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TabActivity;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.ui.TuningActivity;
 
+/**
+ * Adapter to adapt settings data and display it in the settings recyclerview
+ */
 public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.LearnViewHolder> {
 
     // Static integers required as permission codes for requesting and checking permissions
@@ -89,6 +92,11 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
         return new LearnViewHolder(view);
     }
 
+    /**
+     * Binds data to the list_item view
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull LearnViewHolder holder, final int position) {
         if (learnItemList != null) {
@@ -123,6 +131,10 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
         notifyDataSetChanged();
     }
 
+    /**
+     * Takes the item clicked and launches an activty/checks permissions accordingly
+     * @param position
+     */
     private void itemClicked(int position) {
         Intent intent;
         if (isClickable) {
@@ -171,6 +183,11 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
         }
     }
 
+    /**
+     * Checks for the microphone recording permission and only allows the launching of specific features
+     * if the permission check passes
+     * @return
+     */
     private boolean checkPermissions(){
         // Checks if the RECORD_AUDIO permission is granted, and if it is not it prompts the user to
         // allow this permission.
@@ -193,6 +210,10 @@ public class LearnListAdapter extends RecyclerView.Adapter<LearnListAdapter.Lear
         return false;
     }
 
+    /**
+     * Alerts the user that they should allow the microphone permission from their settings so
+     * they can use features locked by permissions
+     */
     private void showPermissionRequiredAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.permission_alert_title));

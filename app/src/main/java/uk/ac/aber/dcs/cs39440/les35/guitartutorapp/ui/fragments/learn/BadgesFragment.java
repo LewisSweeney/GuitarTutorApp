@@ -21,6 +21,10 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Badge;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.StatType;
 
+/**
+ * Fragment for displaying the badges/achievements a user can work towards. Displays these badges
+ * in a recyclerview, and is used as a tab within the Home/Learn activity
+ */
 public class BadgesFragment extends Fragment {
 
     BadgeAdapter adapter;

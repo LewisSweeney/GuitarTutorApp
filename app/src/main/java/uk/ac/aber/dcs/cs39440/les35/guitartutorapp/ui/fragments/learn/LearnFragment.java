@@ -19,7 +19,8 @@ import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.LearnItem;
 
 /**
- *
+ * Fragment for displaying options for tools to help the user learn
+ * Uses a recyclerview with clickable views to navigate to other activities
  */
 public class LearnFragment extends Fragment {
 

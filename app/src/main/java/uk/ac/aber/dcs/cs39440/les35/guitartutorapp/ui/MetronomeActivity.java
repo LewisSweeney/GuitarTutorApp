@@ -14,6 +14,10 @@ import android.widget.TextView;
 import be.tarsos.dsp.synthesis.SineGenerator;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 
+/**
+ * This activity creates a visual and haptic Metronome to be used to help user keep in time.
+ * Generate a small vibration that is slightly longer on the first beat of the determined bar length
+ */
 public class MetronomeActivity extends AppCompatActivity {
 
     final static int ONE_MINUTE_IN_SECONDS = 60;
@@ -126,6 +130,10 @@ public class MetronomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Ticks the metronome for a beat, creating a vibration and changing the display
+     * @throws InterruptedException
+     */
     private void metronomeTick() throws InterruptedException {
 
         if (metronomeActive) {
@@ -155,6 +163,9 @@ public class MetronomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Determines the wait time between changing the display & vibrating again
+     */
     private void setTimeBetweenBeats() {
         if (metronomeSwitch.isChecked()) {
             metronomeSwitch.toggle();
@@ -169,6 +180,9 @@ public class MetronomeActivity extends AppCompatActivity {
         System.out.println(timeBetweenBeats);
     }
 
+    /**
+     * Sets the number of beats to dispaly before starting over, goes up to 16
+     */
     private void setBeatsPerBar() {
         if (metronomeSwitch.isChecked()) {
             metronomeSwitch.toggle();
@@ -187,6 +201,9 @@ public class MetronomeActivity extends AppCompatActivity {
         return (double) tmp / factor;
     }
 
+    /**
+     * Changes the beat display, turning red if it's the first beat in the bar
+     */
     private void changeBeat(){
 
         metronomeBeat.setText(String.valueOf(currentBeat));
@@ -201,6 +218,10 @@ public class MetronomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Stops the thread that changes display and vibrates by setting the metronomeActive boolean
+     * to false
+     */
     private void deactivateMetronome(){
         metronomeActive = false;
         metronomeBeat.setTextColor(getResources().getColor(R.color.black));

@@ -14,7 +14,10 @@ import android.widget.LinearLayout;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters.TabSymbolAdapter;
 
-
+/**
+ * Fragment for displaying symbols for ASCII tablature
+ * Displays said symbols along with a description in a recyclerview
+ */
 public class TabLearnFragment extends Fragment {
 
     RecyclerView symbolList;
