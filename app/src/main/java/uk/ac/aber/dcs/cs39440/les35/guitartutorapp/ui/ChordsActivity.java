@@ -17,7 +17,7 @@ import java.util.List;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.R;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.adapters.SpinnerAdapter;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.datasource.DataManager;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.view.GuitarChordView;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.model.ChordsViewModel;
 import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.objects.Chord;
 

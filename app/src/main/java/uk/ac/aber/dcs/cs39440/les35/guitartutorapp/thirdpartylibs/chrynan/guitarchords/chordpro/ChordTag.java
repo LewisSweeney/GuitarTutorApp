@@ -1,6 +1,6 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.chordpro;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.chordpro;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.view.GuitarChordView;
 
 /*
  * Copyright 2016 chRyNaN

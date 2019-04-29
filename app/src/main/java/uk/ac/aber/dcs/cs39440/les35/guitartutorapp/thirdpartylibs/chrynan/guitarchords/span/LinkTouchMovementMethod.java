@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.span;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.span;
 
 import android.text.Layout;
 import android.text.Selection;

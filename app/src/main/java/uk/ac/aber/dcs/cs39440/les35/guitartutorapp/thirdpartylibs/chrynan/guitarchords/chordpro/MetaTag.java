@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.chordpro;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.chordpro;
 
 /*
  * Copyright 2016 chRyNaN

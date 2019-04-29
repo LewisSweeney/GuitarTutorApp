@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.span;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.span;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -17,7 +17,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.view.GuitarChordView;
 
 /*
  * Copyright 2016 chRyNaN

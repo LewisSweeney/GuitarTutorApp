@@ -94,7 +94,7 @@
         app:layout_constraintRight_toRightOf="@id/chord_view"
         app:layout_constraintTop_toTopOf="@id/chord_view"/>
 
-    <uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView
+    <uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.view.GuitarChordView
         android:id="@+id/chord_view"
         android:layout_width="250dp"
         android:layout_height="wrap_content"

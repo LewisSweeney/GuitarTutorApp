@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.chordpro;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.chordpro;
 
 import android.text.SpannableStringBuilder;
 
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.span.ChordSpan;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view.GuitarChordView;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.span.ChordSpan;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.view.GuitarChordView;
 
 /*
  * Copyright 2016 chRyNaN

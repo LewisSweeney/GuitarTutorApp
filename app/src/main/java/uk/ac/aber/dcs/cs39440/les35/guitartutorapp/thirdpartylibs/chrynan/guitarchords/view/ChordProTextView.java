@@ -1,4 +1,4 @@
-package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.view;
+package uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -6,16 +6,15 @@ import android.os.Build;
 import android.os.Handler;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.chordpro.ChordPro;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.chordpro.ChordTag;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.chordpro.MetaTag;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.chordpro.Tag;
-import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.library.guitarchords.span.LinkTouchMovementMethod;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.chordpro.ChordPro;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.chordpro.ChordTag;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.chordpro.MetaTag;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.chordpro.Tag;
+import uk.ac.aber.dcs.cs39440.les35.guitartutorapp.thirdpartylibs.chrynan.guitarchords.span.LinkTouchMovementMethod;
 
 /*
  * Copyright 2016 chRyNaN

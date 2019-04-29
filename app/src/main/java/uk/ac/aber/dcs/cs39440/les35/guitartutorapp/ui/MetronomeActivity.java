@@ -172,12 +172,9 @@ public class MetronomeActivity extends AppCompatActivity {
             deactivateMetronome();
         }
         int chosenBpmValue = bpmPicker.getValue();
-        System.out.println(chosenBpmValue);
         double beatsPerSecond;
         beatsPerSecond = (double) chosenBpmValue / ONE_MINUTE_IN_SECONDS;
-        System.out.println(beatsPerSecond);
         timeBetweenBeats = (double)1000 / beatsPerSecond;
-        System.out.println(timeBetweenBeats);
     }
 
     /**
@@ -189,9 +186,16 @@ public class MetronomeActivity extends AppCompatActivity {
             deactivateMetronome();
         }
         beatsPerBar = beatPicker.getValue();
-        System.out.println(beatsPerBar);
     }
 
+    /**
+     * Method found here: https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+     *
+     * Used to round a double value to specified number of places
+     * @param value
+     * @param places
+     * @return
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
